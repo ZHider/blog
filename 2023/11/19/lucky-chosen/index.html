@@ -642,6 +642,10 @@ WebAssembly.instantiate(wasm_buffer).then((wasm_imported) => {
         return;
       }
       var text = subtitle.getAttribute('data-typed-text');
+      if (text.indexOf(",") != -1) {
+        var texts = text.split(",");
+        var text = texts[Math.floor(Math.random()*texts.length)];
+      }
       
         typing(text);
       

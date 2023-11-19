@@ -180,7 +180,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="伊万德在这个乱乱的小窝里睡觉。"></span>
+            <span id="subtitle" data-typed-text="伊万德在这个乱乱的小窝里睡觉。,伊万德喜欢软软的被子。"></span>
           
         </div>
 
@@ -332,6 +332,10 @@
         return;
       }
       var text = subtitle.getAttribute('data-typed-text');
+      if (text.indexOf(",") != -1) {
+        var texts = text.split(",");
+        var text = texts[Math.floor(Math.random()*texts.length)];
+      }
       
         typing(text);
       
