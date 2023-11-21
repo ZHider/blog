@@ -1,5 +1,9 @@
-WebAssembly.instantiateStreaming(fetch("/zhider-hexo/wasm/wasm_lucky.wasm")).then(
-    (wasm_moudle) => {
+fetch("/zhider-hexo/wasm/wasm_lucky.wasm").then((response) => {
+    return response.arrayBuffer();
+}).then((ab) => {
+    return WebAssembly.instantiate(ab);
+}).then((wasm_moudle) => {
+
 let wasm = wasm_moudle.instance.exports;
 
 let WASM_VECTOR_LEN = 0;
