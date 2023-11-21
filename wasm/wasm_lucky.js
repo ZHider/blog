@@ -1,8 +1,6 @@
-let wasm;
-export function __wbg_set_wasm(val) {
-    wasm = val;
-}
-
+WebAssembly.instantiateStreaming(fetch("/zhider-hexo/wasm/wasm_lucky.wasm")).then(
+    (wasm_moudle) => {
+let wasm = wasm_moudle.instance.exports;
 
 let WASM_VECTOR_LEN = 0;
 
@@ -93,7 +91,7 @@ function getStringFromWasm0(ptr, len) {
 * @param {string} seed_str
 * @returns {string}
 */
-export function choice(seed_str) {
+function choice(seed_str) {
     let deferred2_0;
     let deferred2_1;
     try {
@@ -112,3 +110,31 @@ export function choice(seed_str) {
     }
 }
 
+//得到标准时区的时间的函数
+//参数i为时区值数字，比如北京为东八区则输进8,西5输入-5
+function getLocalTime(i) {
+if (typeof i !== "number") return;
+
+    var d = new Date();
+    //得到1970年一月一日到现在的秒数
+    var len = d.getTime();
+    //本地时间与GMT时间的时间偏移差(注意：GMT这是UTC的民间名称。GMT=UTC）
+    var offset = d.getTimezoneOffset() * 60000;
+    //得到现在的格林尼治时间
+    var utcTime = len + offset;
+    return new Date(utcTime + 3600000 * i);
+}
+
+function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}${month}${day}`;
+}
+
+let date = formatDate(getLocalTime(8));
+document.getElementById("result").innerText = "Time: " + date + "\n";
+document.getElementById("result").innerText += choice(date);
+
+});
