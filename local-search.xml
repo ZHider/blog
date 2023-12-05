@@ -8,7 +8,7 @@
     <link href="/zhider-hexo/2023/11/19/lucky-chosen/"/>
     <url>/zhider-hexo/2023/11/19/lucky-chosen/</url>
     
-    <content type="html"><![CDATA[<h1 id="每日幸运群友"><a href="#每日幸运群友" class="headerlink" title="每日幸运群友"></a>每日幸运群友</h1><div id="result"></div><script src="/zhider-hexo/wasm/wasm_lucky.js"></script>]]></content>
+    <content type="html"><![CDATA[<h1 id="每日幸运群友"><a href="#每日幸运群友" class="headerlink" title="每日幸运群友"></a>每日幸运群友</h1><p id="today"></p><p id="result"></div><script src="/zhider-hexo/wasm/wasm_lucky_user.js"></script><blockquote><p>version: v2</p></blockquote>]]></content>
     
     
     
