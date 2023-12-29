@@ -78,7 +78,11 @@ function formatDate(date) {
 }
 
 let date = formatDate(getLocalTime(8));
-document.getElementById("today").innerText = "Time: " + date.toString();
-document.getElementById("result").innerText = choice(date);
+let version = 3;
+document.getElementById("today").innerText = 
+    "Version: " + version.toString() +
+    "\nLast Update: 20231230\n" +
+    "Today: " + date.toString();
+document.getElementById("result").innerText = choice((version << 16) + date);
 
 });
