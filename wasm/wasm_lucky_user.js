@@ -78,10 +78,10 @@ function formatDate(date) {
 }
 
 let date = formatDate(getLocalTime(8));
-let version = 3;
+let version = 4;
 document.getElementById("today").innerText = 
     "Version: " + version.toString() +
-    "\nLast Update: 20231230\n" +
+    "\nLast Update: 20240101\n" +
     "Today: " + date.toString();
 document.getElementById("result").innerText = choice((version << 16) + date);
 
