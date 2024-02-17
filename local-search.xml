@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>onepassjs</title>
+    <link href="/zhider-hexo/2024/02/17/onepassjs/"/>
+    <url>/zhider-hexo/2024/02/17/onepassjs/</url>
+    
+    <content type="html"><![CDATA[<h1 id="高强度密码生成器"><a href="#高强度密码生成器" class="headerlink" title="高强度密码生成器"></a>高强度密码生成器</h1><div>    <label for="param1">记忆密码：</label>    <input type="text" id="param1" oninput="testEncrypt()"></div><div>    <label for="param2">区分代号：</label>    <input type="text" id="param2" oninput="testEncrypt()"></div><div>    <label for="specialChars">包含特殊符号：</label>    <input type="checkbox" id="specialChars" onchange="testEncrypt()"></div><div>    <label for="capitalizeFirst">首位大写：</label>    <input type="checkbox" id="capitalizeFirst" onchange="testEncrypt()"></div><div>    <label for="passwordLength">密码长度（6-32位）：</label>    <input type="range" id="passwordLength" min="6" max="32" value="8" oninput="testEncrypt()">    <output id="lengthDisplay">8</output></div><div>    <label for="generatedPassword">生成的密码：</label>    <p id="generatedPassword"></p></div><script src="/zhider-hexo/wasm/onepass.js" type="text/javascript"></script><script>    async function testEncrypt() {        // 在这里编写处理逻辑，根据输入和选项生成并显示密码        const param1 = document.getElementById('param1').value;        const param2 = document.getElementById('param2').value;        const specialCharsEnabled = document.getElementById('specialChars').checked;        const capitalizeFirst = document.getElementById('capitalizeFirst').checked;        const passwordLength = parseInt(document.getElementById('passwordLength').value, 10);        appSettings.with_symbol = specialCharsEnabled;        appSettings.first_capital_letter = capitalizeFirst;        appSettings.password_length = passwordLength;        document.getElementById("lengthDisplay").value = passwordLength;        // 输入框一个是空就不生成        if (!param1 || !param2) {            return;        }        // ... 实现密码生成的代码 ...        let generatedPassword = await encrypt(param1, param2); // 用实际生成的密码替换此处        document.getElementById('generatedPassword').textContent = generatedPassword;    }</script>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Lucky Chosen</title>
     <link href="/zhider-hexo/2023/11/19/lucky-chosen/"/>
     <url>/zhider-hexo/2023/11/19/lucky-chosen/</url>
