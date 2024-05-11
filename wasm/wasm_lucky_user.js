@@ -1,4 +1,4 @@
-fetch("/zhider-hexo/wasm/wasm_lucky_user.wasm")
+fetch("/blog/wasm/wasm_lucky_user.wasm")
 .then((response) => response.arrayBuffer())
 .then((bytes) => WebAssembly.instantiate(bytes))
 .then((wasm_moudle) => {
