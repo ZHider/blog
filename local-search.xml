@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+  
+  <entry>
+    <title>日文假名罗马音标注工具</title>
+    <link href="/2025/10-18-kana2romaji/"/>
+    <url>/2025/10-18-kana2romaji/</url>
+    
+    <content type="html"><![CDATA[<p>输入日文假名（平假名或片假名）：</p><textarea id="kana-input"></textarea><p><button id="convert-btn">转换为罗马音</button></p><div id="output" class="ruby-text"></div><blockquote><ol><li>在文本框中输入日文假名（平假名或片假名）</li><li>点击”转换为罗马音”按钮</li><li>系统会自动为每个假名标注罗马音</li></ol></blockquote><script src="kana2romaji.js"></script><link rel="stylesheet" href="ui-style.css" type="text/css">]]></content>
+    
+    
+    <categories>
+      
+      <category>工具</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>假名</tag>
+      
+      <tag>罗马音</tag>
+      
+      <tag>日文</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>高强度密码生成器 - OnePassJs</title>
+    <link href="/2025/10-07-onepass-js/"/>
+    <url>/2025/10-07-onepass-js/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" href="ui-style.css" type="text/css"><script src="onepass.js"></script><script src="ui-hook.js"></script><div class="onepass-container">  <div>    <label class="input-label" for="param1">Master Password:</label>    <input type="password" id="param1" placeholder="Enter your master password">  </div>    <div>    <label class="input-label" for="param2">Site Name:</label>    <input type="text" id="param2" placeholder="Enter site name (e.g., example.com)">  </div>    <div>    <div class="length-container">      <label class="length-label" for="passwordLength">Password Length:</label>      <span class="range-display" id="lengthDisplay">16</span> characters    </div>    <input type="range" id="passwordLength" min="8" max="64" value="16">  </div>    <div class="checkbox-option">    <input type="checkbox" id="specialChars" checked>    <label for="specialChars">Include Special Characters</label>  </div>    <div class="checkbox-option">    <input type="checkbox" id="capitalizeFirst" checked>    <label for="capitalizeFirst">Capitalize First Letter</label>  </div>    <div class="checkbox-option">    <input type="checkbox" id="savePassword">    <label for="savePassword">Save Master Password (locally)</label>  </div>    <div>    <button id="generateBtn">Generate Password</button>    <button id="copyBtn">Copy to Clipboard</button>  </div>    <div>    <label class="input-label" for="generatedPassword">Generated Password:</label>    <textarea id="generatedPassword" rows="3" readonly></textarea>  </div></div><script>  // 更新密码长度显示  document.getElementById('passwordLength').addEventListener('input', function() {    document.getElementById('lengthDisplay').textContent = this.value;  });</script><blockquote><p>密码生成完全在本地运行，没有网络交互，也不会储存到本地（除了你自己选择的保存密码）。由浏览器提供 Crypto API 进行计算。<br>代码行为完全和 <a href="https://github.com/kaku2015/OnePassWindows">https://github.com/kaku2015/OnePassWindows</a> 相同。</p></blockquote>]]></content>
+    
+    
+    <categories>
+      
+      <category>工具</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>密码</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>ZIP文件管理器（zip.js Demo）</title>
+    <link href="/2025/09-28-zip-manager/"/>
+    <url>/2025/09-28-zip-manager/</url>
+    
+    <content type="html"><![CDATA[<script>  // 跳转到 zip-manager 页面  window.location.href = 'zm-index.html';</script>]]></content>
+    
+    
+    <categories>
+      
+      <category>工具</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>压缩</tag>
+      
+      <tag>文件处理</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  
+</search>
