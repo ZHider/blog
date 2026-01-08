@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>CORS-test</title>
+    <link href="/2026/01-09-CORS-test/"/>
+    <url>/2026/01-09-CORS-test/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" href="./cors-test.css"><h1 id="CORS测试页面"><a href="#CORS测试页面" class="headerlink" title="CORS测试页面"></a>CORS测试页面</h1><h2 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h2><p>此工具可以帮助您测试目标URL的CORS（跨域资源共享）配置。只需输入要测试的URL，然后点击”检测CORS”按钮即可。</p><h3 id="什么是CORS？"><a href="#什么是CORS？" class="headerlink" title="什么是CORS？"></a>什么是CORS？</h3><p>CORS（Cross-Origin Resource Sharing，跨域资源共享）是一种机制，它使用额外的HTTP头来告诉浏览器，<br>允许一个域上的Web应用程序访问另一个域上的资源。这是一种绕开同源策略的安全机制。</p><h3 id="如何使用："><a href="#如何使用：" class="headerlink" title="如何使用："></a>如何使用：</h3><ol><li>在下方输入框中输入要测试的完整URL（例如：<a href="https://api.example.com/data%EF%BC%89">https://api.example.com/data）</a></li><li>点击”检测CORS”按钮</li><li>查看返回的响应头信息，特别是与CORS相关的头部</li></ol><p><label for="target-url">请输入要测试的URL:</label></p><div class="cors-test-input-group">  <input type="text" id="target-url" placeholder="https://example.com/api/endpoint">  <button id="test-cors-btn">检测CORS</button></div><div id="result-container">  <div id="result-content" style="display:none;"><pre><code class="hljs">## 检测结果</code></pre>  </div></div><script type="module" src="./cors-test.js"></script>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>日文假名罗马音标注工具</title>
     <link href="/2025/10-18-kana2romaji/"/>
     <url>/2025/10-18-kana2romaji/</url>
