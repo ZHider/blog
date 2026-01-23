@@ -1,4 +1,0 @@
-http://blog.ivandspc.top/2026/01-09-CORS-test/
-http://blog.ivandspc.top/2025/10-18-kana2romaji/
-http://blog.ivandspc.top/2025/09-28-zip-manager/
-http://blog.ivandspc.top/2025/10-07-onepass-js/
