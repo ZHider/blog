@@ -4,6 +4,19 @@
   
   
   <entry>
+    <title>SBTI测试</title>
+    <link href="/2026/04-09-sb-mbti/"/>
+    <url>/2026/04-09-sb-mbti/</url>
+    
+    <content type="html"><![CDATA[<script>  // 跳转页面  window.location.href = 'SBTI.html';</script>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>CORS-test</title>
     <link href="/2026/01-09-CORS-test/"/>
     <url>/2026/01-09-CORS-test/</url>
