@@ -1,0 +1,1057 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon.webp">
+  <link rel="icon" href="/img/icon.webp">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ZHider">
+  <meta name="keywords" content="ivand,zhider,zhiders blog,伊万德">
+  
+    <meta name="description" content="iPhone 拍出来的 HDR 视频直接压制会丢杜比视界信息？VFR 变 CFR 音画不同步？本文记录完整的排查过程和最终工作流，覆盖 SDR、HDR、Dolby Vision 三种情况。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="保留HDR、杜比压制iPhone录制出的视频">
+<meta property="og:url" content="https://blog.ivandspc.top/2026/05-30-iPhone-vid-encoding/index.html">
+<meta property="og:site_name" content="ZHider&#39;s Blog">
+<meta property="og:description" content="iPhone 拍出来的 HDR 视频直接压制会丢杜比视界信息？VFR 变 CFR 音画不同步？本文记录完整的排查过程和最终工作流，覆盖 SDR、HDR、Dolby Vision 三种情况。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-30T07:27:25.000Z">
+<meta property="article:modified_time" content="2026-05-30T07:57:10.154Z">
+<meta property="article:author" content="ZHider">
+<meta property="article:tag" content="HDR">
+<meta property="article:tag" content="ffmpeg">
+<meta property="article:tag" content="iPhone">
+<meta property="article:tag" content="视频压制">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>保留HDR、杜比压制iPhone录制出的视频 - ZHider&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.ivandspc.top","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>伊万德的小窝</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content (desktop) -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile grid menu overlay -->
+<div id="mobile-grid-menu" class="d-lg-none">
+  <div class="mobile-grid-menu-inner">
+    <div class="container">
+      <div class="row">
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-home-fill"></i>
+                  <span>首页</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/archives/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-archive-fill"></i>
+                  <span>归档</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/categories/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-category-fill"></i>
+                  <span>分类</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/tags/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-tags-fill"></i>
+                  <span>标签</span>
+                </div>
+              </a>
+            </div>
+          
+        
+          
+          
+          
+          
+            <div class="col-4 mobile-grid-cell">
+              <a href="/about/" target="_self">
+                <div class="mobile-grid-item">
+                  <i class="iconfont icon-user-fill"></i>
+                  <span>关于</span>
+                </div>
+              </a>
+            </div>
+          
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
+            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-search"></i>
+                <span>搜索</span>
+              </div>
+            </a>
+          </div>
+        
+        
+          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
+               data-label-light="开灯"
+               data-label-dark="关灯">
+            <a href="javascript:;" aria-label="Color Toggle">
+              <div class="mobile-grid-item">
+                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
+                <span id="mobile-color-toggle-label">关灯</span>
+              </div>
+            </a>
+          </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="保留HDR、杜比压制iPhone录制出的视频"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-05-30 15:27" pubdate>
+          2026年5月30日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          48 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">保留HDR、杜比压制iPhone录制出的视频</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="TLDR"><a href="#TLDR" class="headerlink" title="TLDR"></a>TLDR</h2><p>我已经编写了一个 Python 脚本用于生成在 Windows 平台上调用相关工具对视频进行压制的脚本：<a target="_blank" rel="noopener" href="https://github.com/ZHider/iPhone-Hdr-Vid-Compressor">https://github.com/ZHider/iPhone-Hdr-Vid-Compressor</a>。<br>它能够对每个视频生成一个批处理文件，自动执行全部流程。去看看吧！</p>
+<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>用 iPhone 拍了一段慢动作，120fps 的，带 Dolby Vision HDR 效果。想着压一下体积，毕竟原始 MOV 太大了。结果压完一看——HDR 没了、杜比视界也没了，画面还时不时音画不同步。</p>
+<p>于是，折腾就开始了。</p>
+<hr>
+<h2 id="踩坑：直接用-ffmpeg-转换"><a href="#踩坑：直接用-ffmpeg-转换" class="headerlink" title="踩坑：直接用 ffmpeg 转换"></a>踩坑：直接用 ffmpeg 转换</h2><p>最开始的尝试很简单，ffmpeg 一把梭：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffmpeg -i input.mov -c:v libx265 -crf 18 -c:a copy output.mp4<br></code></pre></td></tr></table></figure>
+
+<p>结果出现了三个问题：</p>
+<ol>
+<li><strong>HDR &#x2F; 杜比视界信息全没了</strong>，画面灰扑扑的</li>
+<li><strong>音画不同步</strong>，明明源视频看着好好的</li>
+<li><strong>时不时跳帧</strong>，观感很差</li>
+</ol>
+<p>带着这三个问题，开始深挖。</p>
+<hr>
+<h2 id="深入分析：先判断视频类型"><a href="#深入分析：先判断视频类型" class="headerlink" title="深入分析：先判断视频类型"></a>深入分析：先判断视频类型</h2><p>用 <code>ffprobe</code> 扫一下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffprobe -v quiet -print_format json -show_streams input.mov<br></code></pre></td></tr></table></figure>
+
+<p>看完输出，可以按以下逻辑分支：</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs avrasm">视频输入<br>    ↓<br>ffprobe 分析<br>    ↓<br>检查是否有 Dolby Vision 侧数据？<br>    ├─ 有 → Dolby Vision 分支<br>    └─ 无 → 检查 color_transfer<br>              ├─ smpte2084/arib-<span class="hljs-keyword">std</span>-b67 → HDR 分支<br>              └─ 其他 → SDR 分支<br></code></pre></td></tr></table></figure>
+
+<p>iPhone 拍出来的通常是 <strong>Dolby Vision Profile 8.4</strong>（HLG 兼容），走的是最复杂的 Dolby Vision 分支。但如果你手里还有普通 SDR 或 HDR10 的视频，处理方式完全不同。</p>
+<p>接下来，按三种类型分别展开。</p>
+<hr>
+<h2 id="SDR-视频处理"><a href="#SDR-视频处理" class="headerlink" title="SDR 视频处理"></a>SDR 视频处理</h2><p>SDR 最简单，但我在视频处理中，出现了奇怪的问题：提取音频的时候有时会出现错误。所以根据源音频类型，分类处理。</p>
+<h3 id="情况一：源音频是-AAC（复杂流程）"><a href="#情况一：源音频是-AAC（复杂流程）" class="headerlink" title="情况一：源音频是 AAC（复杂流程）"></a>情况一：源音频是 AAC（复杂流程）</h3><p>为了避免 MKV + AAC 的兼容性问题，先把视频和音频分开处理，最后再合并：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs stylus">输入 SDR 视频<br>    ↓<br><span class="hljs-selector-attr">[步骤1]</span> ffmpeg 编码视频（不含音频）<br>    - <span class="hljs-number">8</span>-bit HEVC (yuv420p)<br>    - NVENC 编码器<br>    - 输出: <span class="hljs-selector-tag">video</span><span class="hljs-selector-class">.mkv</span><br>    ↓<br><span class="hljs-selector-attr">[步骤2]</span> ffmpeg 提取音频<br>    - 复制 AAC 流 (copy)<br>    - ADTS 格式封装<br>    - 输出: <span class="hljs-selector-tag">audio</span><span class="hljs-selector-class">.aac</span><br>    ↓<br><span class="hljs-selector-attr">[步骤3]</span> mkvmerge 合并<br>    - 合并 <span class="hljs-selector-tag">video</span><span class="hljs-selector-class">.mkv</span> + <span class="hljs-selector-tag">audio</span><span class="hljs-selector-class">.aac</span><br>    - 输出最终 MKV<br>    ↓<br>清理临时文件<br></code></pre></td></tr></table></figure>
+
+<p><strong>对应命令：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 步骤1：仅编码视频</span><br>ffmpeg -i input.mp4 -an ^<br>  -c:v hevc_nvenc -preset p6 -rc vbr_hq -cq 19 ^<br>  -pix_fmt yuv420p -profile:v main ^<br>  video.mkv<br><br><span class="hljs-comment"># 步骤2：提取音频</span><br>ffmpeg -i input.mp4 -vn -c:a copy audio.aac<br><br><span class="hljs-comment"># 步骤3：合并</span><br>mkvmerge -o output.mkv video.mkv audio.aac<br><br><span class="hljs-comment"># 清理</span><br>del video.mkv audio.aac<br></code></pre></td></tr></table></figure>
+
+<h3 id="情况二：源音频非-AAC-或无音频（简单流程）"><a href="#情况二：源音频非-AAC-或无音频（简单流程）" class="headerlink" title="情况二：源音频非 AAC 或无音频（简单流程）"></a>情况二：源音频非 AAC 或无音频（简单流程）</h3><p>这种情况下，一条命令搞定：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffmpeg -i input.mp4 ^<br>  -c:v hevc_nvenc -preset p6 -rc vbr_hq -cq 19 ^<br>  -pix_fmt yuv420p -profile:v main ^<br>  -c:a aac -b:a 256k ^<br>  output.mkv<br></code></pre></td></tr></table></figure>
+
+<p>如果源没有音频，加上 <code>-an</code> 即可。</p>
+<hr>
+<h2 id="HDR-视频处理"><a href="#HDR-视频处理" class="headerlink" title="HDR 视频处理"></a>HDR 视频处理</h2><p>HDR 和 SDR 的框架一样，区别在于：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>SDR</th>
+<th>HDR</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>色深</td>
+<td>8-bit</td>
+<td>10-bit</td>
+</tr>
+<tr>
+<td>像素格式</td>
+<td>yuv420p</td>
+<td>p010le</td>
+</tr>
+<tr>
+<td>编码 Profile</td>
+<td>main</td>
+<td>main10</td>
+</tr>
+<tr>
+<td>HDR 元数据</td>
+<td>不需要</td>
+<td>需要传递信号</td>
+</tr>
+</tbody></table>
+<h3 id="情况一：源音频是-AAC（复杂流程）-1"><a href="#情况一：源音频是-AAC（复杂流程）-1" class="headerlink" title="情况一：源音频是 AAC（复杂流程）"></a>情况一：源音频是 AAC（复杂流程）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 步骤1：编码视频（带 HDR 元数据）</span><br>ffmpeg -i input.mp4 -an ^<br>  -c:v hevc_nvenc -preset p6 -rc vbr_hq -cq 19 ^<br>  -pix_fmt p010le -profile:v main10 ^<br>  -colorspace bt2020nc -color_primaries bt2020 -color_trc smpte2084 ^<br>  video.mkv<br><br><span class="hljs-comment"># 步骤2：提取音频</span><br>ffmpeg -i input.mp4 -vn -c:a copy audio.aac<br><br><span class="hljs-comment"># 步骤3：合并</span><br>mkvmerge -o output.mkv video.mkv audio.aac<br><br><span class="hljs-comment"># 清理</span><br>del video.mkv audio.aac<br></code></pre></td></tr></table></figure>
+
+<p>注意这里的 <code>-colorspace</code>、<code>-color_primaries</code>、<code>-color_trc</code> 三个参数，它们是 HDR 信号的元数据标识，告诉播放器”这是一段 HDR 视频，请用正确的色彩空间渲染”。</p>
+<h3 id="情况二：源音频非-AAC（简单流程）"><a href="#情况二：源音频非-AAC（简单流程）" class="headerlink" title="情况二：源音频非 AAC（简单流程）"></a>情况二：源音频非 AAC（简单流程）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffmpeg -i input.mp4 ^<br>  -c:v hevc_nvenc -preset p6 -rc vbr_hq -cq 19 ^<br>  -pix_fmt p010le -profile:v main10 ^<br>  -colorspace bt2020nc -color_primaries bt2020 -color_trc smpte2084 ^<br>  -c:a aac -b:a 256k ^<br>  output.mkv<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Dolby-Vision-视频处理（重点）"><a href="#Dolby-Vision-视频处理（重点）" class="headerlink" title="Dolby Vision 视频处理（重点）"></a>Dolby Vision 视频处理（重点）</h2><p>这是最复杂的流程，<strong>无论音频是什么格式，都走完整流程</strong>，因为 Dolby Vision 的 RPU 元数据必须额外处理。</p>
+<h3 id="为什么这么复杂？"><a href="#为什么这么复杂？" class="headerlink" title="为什么这么复杂？"></a>为什么这么复杂？</h3><p>Dolby Vision 的动态元数据（RPU）不是普通的视频 tag，它是<strong>独立于 HEVC 码流之外的侧数据（side data）</strong>。ffmpeg 直接重编码时，这个侧数据会被丢弃。所以必须：</p>
+<ol>
+<li>先从源视频中<strong>提取</strong> RPU</li>
+<li>编码新视频</li>
+<li>再把 RPU <strong>注入</strong>回新编码的 HEVC 流</li>
+</ol>
+<p>否则，杜比视界就没了。</p>
+<h3 id="完整流程"><a href="#完整流程" class="headerlink" title="完整流程"></a>完整流程</h3><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs angelscript">输入 Dolby Vision 视频<br>    ↓<br>创建临时目录<br>    ↓<br><span class="hljs-string">[步骤1]</span> 提取原始 HEVC 码流<br>    ffmpeg -c:v copy -bsf:v hevc_mp4toannexb -f hevc<br>    输出: src.hevc<br>    ↓<br><span class="hljs-string">[步骤2]</span> 提取 Dolby Vision RPU<br>    dovi_tool extract-rpu src.hevc<br>    输出: RPU.bin<br>    ↓<br><span class="hljs-string">[步骤3]</span> NVENC 重新编码<br>    ffmpeg 编码为 <span class="hljs-number">10</span>-bit HEVC<br>    输出: encoded.mkv<br>    ↓<br><span class="hljs-string">[步骤4]</span> 提取编码后的原始流和时间戳<br>    mkvextract tracks encoded.mkv → encoded.hevc<br>    mkvextract timestamps_v2 → timestamps.txt<br>    ↓<br><span class="hljs-string">[步骤5]</span> 注入 RPU<br>    dovi_tool inject-rpu -i encoded.hevc --rpu-<span class="hljs-keyword">in</span> RPU.bin<br>    输出: <span class="hljs-keyword">final</span>.hevc<br>    ↓<br><span class="hljs-string">[步骤6]</span> 提取/转码音频<br>    - AAC 源 → 复制<br>    - 其他 → 转码 AAC <span class="hljs-number">256</span>k<br>    输出: audio.aac (ADTS)<br>    ↓<br><span class="hljs-string">[步骤7]</span> 最终封装<br>    mkvmerge -o output.mkv \<br>      --timestamps <span class="hljs-number">0</span>:timestamps.txt \<br>      <span class="hljs-keyword">final</span>.hevc \<br>      audio.aac<br>    ↓<br>清理临时文件<br></code></pre></td></tr></table></figure>
+
+<h3 id="对应命令"><a href="#对应命令" class="headerlink" title="对应命令"></a>对应命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 步骤1：提取原始 HEVC 码流</span><br>ffmpeg -i input.mov -c:v copy -bsf:v hevc_mp4toannexb -f hevc src.hevc<br><br><span class="hljs-comment"># 步骤2：提取 RPU</span><br>dovi_tool extract-rpu src.hevc -o RPU.bin<br><br><span class="hljs-comment"># 步骤3：NVENC 重新编码（10-bit）</span><br>ffmpeg -i input.mov -an ^<br>  -c:v hevc_nvenc -preset p6 -rc vbr_hq -cq 19 ^<br>  -pix_fmt p010le -profile:v main10 ^<br>  -colorspace bt2020nc -color_primaries bt2020 -color_trc arib-std-b67 ^<br>  -fps_mode passthrough ^<br>  encoded.mkv<br><br><span class="hljs-comment"># 步骤4：提取 HEVC 流和时间戳</span><br>mkvextract tracks encoded.mkv 1:encoded.hevc<br>mkvextract timestamps_v2 encoded.mkv 1:timestamps.txt<br><br><span class="hljs-comment"># 步骤5：注入 RPU</span><br>dovi_tool inject-rpu -i encoded.hevc --rpu-in RPU.bin -o final.hevc<br><br><span class="hljs-comment"># 步骤6：处理音频</span><br><span class="hljs-comment"># 如果源音频是 AAC：</span><br>ffmpeg -i input.mov -vn -c:a copy audio.aac<br><span class="hljs-comment"># 如果源音频不是 AAC：</span><br><span class="hljs-comment"># ffmpeg -i input.mov -vn -c:a aac -b:a 256k audio.aac</span><br><br><span class="hljs-comment"># 步骤7：最终封装（保留 VFR 时间戳）</span><br>mkvmerge -o output.mkv --timestamps 0:timestamps.txt final.hevc audio.aac<br><br><span class="hljs-comment"># 清理临时文件</span><br>del src.hevc RPU.bin encoded.mkv encoded.hevc timestamps.txt final.hevc audio.aac<br></code></pre></td></tr></table></figure>
+
+<h3 id="关键点总结"><a href="#关键点总结" class="headerlink" title="关键点总结"></a>关键点总结</h3><ol>
+<li><strong>必须提取 RPU</strong>：保留原始动态元数据，这是杜比视界的灵魂</li>
+<li><strong>重新编码后注入</strong>：新编码的视频会丢失 DV 信息，必须手动注回去</li>
+<li><strong>时间戳保留</strong>：<code>mkvextract timestamps_v2</code> 提取并重新应用时间戳，确保 VFR 音视频同步</li>
+<li><strong><code>-fps_mode passthrough</code></strong>：保留可变帧率，避免慢动作视频音画不同步</li>
+<li><strong>无论音频格式都走分离流程</strong>：因为步骤已经够复杂了，统一用临时文件方式最稳妥</li>
+</ol>
+<hr>
+<h2 id="如果需要转-SDR-呢？"><a href="#如果需要转-SDR-呢？" class="headerlink" title="如果需要转 SDR 呢？"></a>如果需要转 SDR 呢？</h2><p>有时候需要把 HDR&#x2F;杜比视界转成 SDR 给老设备看，除了 tone mapping，这里有个容易忽略的问题：<strong>色带</strong>。</p>
+<p>源视频是 <strong>10-bit</strong>（<code>pix_fmt=p010le</code>），HDR→SDR 转换时应保持 10-bit 处理精度，只在最后输出时决定要不要降到 8-bit。</p>
+<h3 id="推荐方案：保持-10-bit"><a href="#推荐方案：保持-10-bit" class="headerlink" title="推荐方案：保持 10-bit"></a>推荐方案：保持 10-bit</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffmpeg -i input.mov ^<br>  -map 0:v:0 -map 0:a:0 ^<br>  -vf <span class="hljs-string">&quot;libplacebo=format=yuv420p10le:colorspace=bt709:color_primaries=bt709:color_trc=bt709:range=tv:tonemapping=bt.2446a:peak_detect=1&quot;</span> ^<br>  -c:v hevc_nvenc -preset p6 -rc vbr_hq -cq 19 ^<br>  -pix_fmt yuv420p10le -profile:v main10 ^<br>  -fps_mode passthrough ^<br>  -c:a aac -b:a 192k ^<br>  output_sdr.mkv<br></code></pre></td></tr></table></figure>
+
+<h3 id="如果确实需要-8-bit（兼容老设备）"><a href="#如果确实需要-8-bit（兼容老设备）" class="headerlink" title="如果确实需要 8-bit（兼容老设备）"></a>如果确实需要 8-bit（兼容老设备）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">ffmpeg -i input.mov ^<br>  -map 0:v:0 -map 0:a:0 ^<br>  -vf <span class="hljs-string">&quot;libplacebo=format=yuv420p:colorspace=bt709:color_primaries=bt709:color_trc=bt709:range=tv:tonemapping=bt.2446a:peak_detect=1,dither=ordered&quot;</span> ^<br>  -c:v hevc_nvenc -preset p6 -rc vbr_hq -cq 19 ^<br>  -pix_fmt yuv420p -profile:v main ^<br>  -fps_mode passthrough ^<br>  -c:a aac -b:a 192k ^<br>  output_sdr_8bit.mkv<br></code></pre></td></tr></table></figure>
+
+<p><strong>选择建议：</strong></p>
+<table>
+<thead>
+<tr>
+<th>输出目标</th>
+<th>推荐位深</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>现代电视&#x2F;显示器&#x2F;手机</td>
+<td><strong>10-bit</strong></td>
+<td>避免色带，保留平滑渐变</td>
+</tr>
+<tr>
+<td>老旧设备 &#x2F; 特定平台限制</td>
+<td>8-bit</td>
+<td>兼容性</td>
+</tr>
+<tr>
+<td>需要二次编码</td>
+<td><strong>10-bit</strong></td>
+<td>避免多次量化损失</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="三种流程对比总结"><a href="#三种流程对比总结" class="headerlink" title="三种流程对比总结"></a>三种流程对比总结</h2><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>SDR</th>
+<th>HDR</th>
+<th>Dolby Vision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>色深</td>
+<td>8-bit</td>
+<td>10-bit</td>
+<td>10-bit</td>
+</tr>
+<tr>
+<td>像素格式</td>
+<td>yuv420p</td>
+<td>p010le</td>
+<td>p010le</td>
+</tr>
+<tr>
+<td>编码 Profile</td>
+<td>main</td>
+<td>main10</td>
+<td>main10</td>
+</tr>
+<tr>
+<td>HDR 元数据</td>
+<td>不需要</td>
+<td>需要信号传递</td>
+<td>RPU 注入</td>
+</tr>
+<tr>
+<td>AAC 特殊处理</td>
+<td>是（分离流程）</td>
+<td>是（分离流程）</td>
+<td>固定分离流程</td>
+</tr>
+<tr>
+<td>工具需求</td>
+<td>ffmpeg, mkvmerge</td>
+<td>ffmpeg, mkvmerge</td>
+<td>ffmpeg, dovi_tool, mkvtoolnix</td>
+</tr>
+<tr>
+<td>步骤数（简单）</td>
+<td>1 步</td>
+<td>1 步</td>
+<td>7 步</td>
+</tr>
+<tr>
+<td>步骤数（AAC）</td>
+<td>3 步</td>
+<td>3 步</td>
+<td>7 步</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="关于-VFR-和跳帧"><a href="#关于-VFR-和跳帧" class="headerlink" title="关于 VFR 和跳帧"></a>关于 VFR 和跳帧</h2><p>iPhone 慢动作视频还有一个特性：<strong>可变帧率（VFR）+ edit list</strong>。</p>
+<ul>
+<li>物理帧率 120fps，但通过 edit list 控制播放速度，实际显示约 29.71fps</li>
+<li>MOV 中 B 帧按 DTS 存储，PTS 与 DTS 不同，这是正常行为，不是 bug</li>
+</ul>
+<p>如果强制用 <code>-fps_mode cfr</code>（ffmpeg 默认行为），会跳帧&#x2F;多帧且音画不同步。所以所有流程中都用了 <code>-fps_mode passthrough</code> 保留原始时序。</p>
+<hr>
+<h2 id="总结一下"><a href="#总结一下" class="headerlink" title="总结一下"></a>总结一下</h2><p>折腾一圈下来，核心要点就三条：</p>
+<ol>
+<li><strong>先判断视频类型</strong>（SDR &#x2F; HDR &#x2F; Dolby Vision），不同类型走不同流程，别一把梭</li>
+<li><strong>Dolby Vision 的 RPU 元数据必须用 <code>dovi_tool</code> 手动提取和注入</strong>，ffmpeg 帮不了你这个忙</li>
+<li><strong>VFR 视频必须用 <code>-fps_mode passthrough</code> 保留原始时序</strong>，否则慢动作视频一定音画不同步</li>
+</ol>
+<p>至于 ShanaEncoder 之类的 GUI 工具，本质上也是调 ffmpeg，但它对 VFR 和 edit list 的处理往往不如命令行精确。如果需求就是保留 HDR + VFR，我更偏向于全部流程可控制。</p>
+<hr>
+<h2 id="需要准备的工具"><a href="#需要准备的工具" class="headerlink" title="需要准备的工具"></a>需要准备的工具</h2><ul>
+<li><strong>ffmpeg</strong>（最新版，带 NVENC 和 libplacebo 支持）</li>
+<li><strong>dovi_tool</strong>（<a target="_blank" rel="noopener" href="https://github.com/quietvoid/dovi_tool">GitHub 地址</a>）</li>
+<li><strong>MKVToolNix</strong>（提供 mkvextract &#x2F; mkvmerge）</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%8A%98%E8%85%BE/" class="category-chain-item">折腾</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/iPhone/" class="print-no-link">#iPhone</a>
+      
+        <a href="/tags/HDR/" class="print-no-link">#HDR</a>
+      
+        <a href="/tags/ffmpeg/" class="print-no-link">#ffmpeg</a>
+      
+        <a href="/tags/%E8%A7%86%E9%A2%91%E5%8E%8B%E5%88%B6/" class="print-no-link">#视频压制</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>保留HDR、杜比压制iPhone录制出的视频</div>
+      <div>https://blog.ivandspc.top/2026/05-30-iPhone-vid-encoding/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ZHider</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年5月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/06-07-LinAI-client/" title="LinAI 前端">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">LinAI 前端</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/04-09-sb-mbti/" title="SBTI测试">
+                        <span class="hidden-mobile">SBTI测试</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments">
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23lieyDHXPGmHlFL2N","clientSecret":"5b47849bde29359d495aa6a22ed4f46916008441","repo":"zhider-blog","owner":"ZHider","admin":["ZHider"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cloudflare-cors-anywhere.littlehider.workers.dev/?https://github.com/login/oauth/access_token"},
+          {
+            id: '0d3680a3999633ac7b8bd9cc48516ebd'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    function isExpandAllEnabled() {
+      return CONFIG.toc && CONFIG.toc.expand_all === true;
+    }
+    function expandAllToc() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
+    }
+    function updateTocToggle($li, $childList) {
+      var $toggle = $li.children('.toc-toggle');
+      if ($toggle.length === 0) { return; }
+      var collapsed = $childList.hasClass('tocbot-is-collapsed');
+      $toggle
+        .toggleClass('toc-toggle-collapsed', collapsed)
+        .toggleClass('toc-toggle-expanded', !collapsed);
+    }
+    function bindTocToggle() {
+      if (!isExpandAllEnabled()) { return; }
+      jQuery('#toc-body .toc-list-item').each(function() {
+        var $li = jQuery(this);
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) {
+          if ($li.children('.toc-toggle').length === 0) {
+            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
+          }
+          return;
+        }
+
+        if ($li.children('.toc-toggle').length === 0) {
+          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
+        }
+        updateTocToggle($li, $childList);
+      });
+      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var $li = jQuery(this).parent('.toc-list-item');
+        var $childList = $li.children('ol');
+        if ($childList.length === 0) { return; }
+        $childList.toggleClass('tocbot-is-collapsed');
+        updateTocToggle($li, $childList);
+      });
+      if (!window.__tocToggleObserver) {
+        window.__tocToggleObserver = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
+            var $list = jQuery(mutation.target);
+            var $li = $list.parent('.toc-list-item');
+            if ($li.length === 0) { return; }
+            updateTocToggle($li, $list);
+          });
+        });
+        jQuery('#toc-body ol').each(function() {
+          window.__tocToggleObserver.observe(this, { attributes: true });
+        });
+      }
+    }
+    var tocConfig = Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc);
+    if (isExpandAllEnabled()) {
+      tocConfig.collapseDepth = 6;
+    }
+    window.tocbot.init(tocConfig);
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+    expandAllToc();
+    bindTocToggle();
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+        expandAllToc();
+        bindTocToggle();
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
