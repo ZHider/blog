@@ -8,7 +8,7 @@
     <link href="/2026/06-10-daia-trip-map/"/>
     <url>/2026/06-10-daia-trip-map/</url>
     
-    <content type="html"><![CDATA[<script>  // 跳转到 LinAI 页面  window.location.href = 'daia-trip-map.html';</script>]]></content>
+    <content type="html"><![CDATA[<script>  window.location.href = 'daia-trip-map.html';</script>]]></content>
     
     
     

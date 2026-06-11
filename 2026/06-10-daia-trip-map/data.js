@@ -84,7 +84,7 @@ const TRIP_DATA = [
     ]
   },
   {
-    day: "第三天（6月X日）",
+    day: "第三天（6月21日）",
     items: [
       {
         id: "day3-0",
