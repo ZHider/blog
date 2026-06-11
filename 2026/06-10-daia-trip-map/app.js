@@ -312,7 +312,7 @@ function handleRoutePlanning() {
   addMarker(endPoint);
 
   // 缓存 key 基于起点和终点
-  const cacheKey = `daia_trip_route_${dayIndex}_${startPoint.name}_${endPoint.name}`;
+  const cacheKey = `daia_trip_route_${dayIndex}_${startPoint.location}_${endPoint.location}`;
   const cached = getCachedRoute(cacheKey);
 
   if (cached) {

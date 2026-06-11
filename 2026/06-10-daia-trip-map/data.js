@@ -122,14 +122,14 @@ const TRIP_DATA = [
         location: [125.379262,43.835152]
       },
       {
-        id: "day3-4",
+        id: "day3-5",
         name: "坐火车去机场",
         time: "下午 17:00",
         icon: "🚂",
         location: [125.324329,43.912597]
       },
       {
-        id: "day3-5",
+        id: "day3-6",
         name: "到达机场",
         time: "下午 17:30",
         icon: "✈️",
