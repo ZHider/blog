@@ -1,0 +1,72 @@
+/* CORS-test 检测工具 - 自定义样式（仅 Bootstrap 无法满足的部分） */
+
+.cors-container {
+  padding: 1em 0;
+}
+
+.cors-container .btn-lg {
+  padding: 0.4em 0.8em;
+  font-size: 1rem;
+}
+
+.cors-container .result-section {
+  margin-top: 1.5rem;
+}
+
+.cors-container .result-section pre {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  padding: 1rem;
+  font-size: 0.875rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.cors-container .result-section .alert {
+  margin-bottom: 1rem;
+}
+
+.cors-container .header-item {
+  padding: 0.25rem 0;
+  border-bottom: 1px dashed #dee2e6;
+}
+
+.cors-container .header-item:last-child {
+  border-bottom: none;
+}
+
+.cors-container .header-name {
+  font-weight: 600;
+  color: #495057;
+}
+
+.cors-container .header-value {
+  color: #6c757d;
+  word-break: break-all;
+}
+
+#responseBodyCard pre {
+  padding-top: 0;
+  padding-left: 0.5em;
+}
+
+/* 深色模式适配 */
+html[data-user-color-scheme="dark"] .cors-container pre {
+  background-color: #2a2a2a;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+html[data-user-color-scheme="dark"] .cors-container .header-name {
+  color: #adb5bd;
+}
+
+html[data-user-color-scheme="dark"] .cors-container .header-value {
+  color: #ced4da;
+}
+
+html[data-user-color-scheme="dark"] .cors-container .header-item {
+  border-bottom-color: #444;
+}

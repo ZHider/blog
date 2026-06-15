@@ -19,25 +19,23 @@
   <meta name="author" content="ZHider">
   <meta name="keywords" content="ivand,zhider,zhiders blog,伊万德">
   
-    <meta name="description" content="一个用于测试跨域资源共享(CORS)策略的工具页面，允许用户输入URL并检测其CORS头部配置">
+    <meta name="description" content="纯前端 CORS 检测工具，测试跨域请求是否被允许">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CORS-test">
-<meta property="og:url" content="https://blog.ivandspc.top/2026/01-09-CORS-test/index.html">
+<meta property="og:title" content="前端CORS直接测试">
+<meta property="og:url" content="https://blog.ivandspc.top/2026/06-15-CORS-test/index.html">
 <meta property="og:site_name" content="ZHider&#39;s Blog">
-<meta property="og:description" content="一个用于测试跨域资源共享(CORS)策略的工具页面，允许用户输入URL并检测其CORS头部配置">
+<meta property="og:description" content="纯前端 CORS 检测工具，测试跨域请求是否被允许">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-01-08T17:50:27.000Z">
-<meta property="article:modified_time" content="2026-01-08T18:32:32.115Z">
+<meta property="article:published_time" content="2026-06-14T20:47:35.000Z">
+<meta property="article:modified_time" content="2026-06-15T04:05:42.397Z">
 <meta property="article:author" content="ZHider">
-<meta property="article:tag" content="ivand">
-<meta property="article:tag" content="zhider">
-<meta property="article:tag" content="zhiders blog">
-<meta property="article:tag" content="伊万德">
+<meta property="article:tag" content="CORS">
+<meta property="article:tag" content="工具">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>CORS-test - ZHider&#39;s Blog</title>
+  <title>前端CORS直接测试 - ZHider&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -75,7 +73,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"blog.ivandspc.top","root":"/","version":"1.9.9","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"expand_all":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"openkounter":{"server_url":"https://open-kounter.mintimate.cn","path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"blog.ivandspc.top","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -88,7 +86,7 @@
 
 
   
-<meta name="generator" content="Hexo 8.0.0"></head>
+<meta name="generator" content="Hexo 8.1.2"></head>
 
 
 <body>
@@ -110,7 +108,7 @@
       <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
 
-    <!-- Collapsible content (desktop) -->
+    <!-- Collapsible content -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto text-center">
         
@@ -194,109 +192,6 @@
   </div>
 </nav>
 
-<!-- Mobile grid menu overlay -->
-<div id="mobile-grid-menu" class="d-lg-none">
-  <div class="mobile-grid-menu-inner">
-    <div class="container">
-      <div class="row">
-        
-          
-          
-          
-          
-            <div class="col-4 mobile-grid-cell">
-              <a href="/" target="_self">
-                <div class="mobile-grid-item">
-                  <i class="iconfont icon-home-fill"></i>
-                  <span>首页</span>
-                </div>
-              </a>
-            </div>
-          
-        
-          
-          
-          
-          
-            <div class="col-4 mobile-grid-cell">
-              <a href="/archives/" target="_self">
-                <div class="mobile-grid-item">
-                  <i class="iconfont icon-archive-fill"></i>
-                  <span>归档</span>
-                </div>
-              </a>
-            </div>
-          
-        
-          
-          
-          
-          
-            <div class="col-4 mobile-grid-cell">
-              <a href="/categories/" target="_self">
-                <div class="mobile-grid-item">
-                  <i class="iconfont icon-category-fill"></i>
-                  <span>分类</span>
-                </div>
-              </a>
-            </div>
-          
-        
-          
-          
-          
-          
-            <div class="col-4 mobile-grid-cell">
-              <a href="/tags/" target="_self">
-                <div class="mobile-grid-item">
-                  <i class="iconfont icon-tags-fill"></i>
-                  <span>标签</span>
-                </div>
-              </a>
-            </div>
-          
-        
-          
-          
-          
-          
-            <div class="col-4 mobile-grid-cell">
-              <a href="/about/" target="_self">
-                <div class="mobile-grid-item">
-                  <i class="iconfont icon-user-fill"></i>
-                  <span>关于</span>
-                </div>
-              </a>
-            </div>
-          
-        
-        
-          <div class="col-4 mobile-grid-cell" id="mobile-search-btn">
-            <a href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              <div class="mobile-grid-item">
-                <i class="iconfont icon-search"></i>
-                <span>搜索</span>
-              </div>
-            </a>
-          </div>
-        
-        
-          <div class="col-4 mobile-grid-cell" id="mobile-color-toggle-btn"
-               data-label-light="开灯"
-               data-label-dark="关灯">
-            <a href="javascript:;" aria-label="Color Toggle">
-              <div class="mobile-grid-item">
-                <i class="iconfont icon-dark" id="mobile-color-toggle-icon"></i>
-                <span id="mobile-color-toggle-label">关灯</span>
-              </div>
-            </a>
-          </div>
-        
-      </div>
-    </div>
-  </div>
-</div>
-
   
 
 <div id="banner" class="banner" parallax=true
@@ -306,7 +201,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="CORS-test"></span>
+            <span id="subtitle" data-typed-text="前端CORS直接测试"></span>
           
         </div>
 
@@ -317,8 +212,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2026-01-09 01:50" pubdate>
-          2026年1月9日 凌晨
+        <time datetime="2026-06-15 04:47" pubdate>
+          2026年6月15日 凌晨
         </time>
       </span>
     
@@ -329,7 +224,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          300 字
+          967 字
         
       </span>
     
@@ -340,7 +235,7 @@
         
         
         
-          3 分钟
+          9 分钟
         
       </span>
     
@@ -357,8 +252,6 @@
     </div>
   </div>
 </div>
-
-
 
 </div>
 
@@ -379,34 +272,217 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">CORS-test</h1>
+            <h1 id="seo-header">前端CORS直接测试</h1>
             
             
               <div class="markdown-body">
                 
-                <link rel="stylesheet" href="./cors-test.css">
+                <h2 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h2><p>输入目标 URL，点击检测按钮测试当前页面是否可以跨域访问该 URL。<br>由于浏览器安全限制，当 CORS 失败时无法获取服务器返回的具体 CORS 头信息，只能给出”被阻止”的判断。<br>请打开浏览器开发者工具的 Network 面板查看完整细节。</p>
+<link rel="stylesheet" href="./cors-style.css" />
 
-<h1 id="CORS测试页面"><a href="#CORS测试页面" class="headerlink" title="CORS测试页面"></a>CORS测试页面</h1><h2 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h2><p>此工具可以帮助您测试目标URL的CORS（跨域资源共享）配置。只需输入要测试的URL，然后点击”检测CORS”按钮即可。</p>
-<h3 id="什么是CORS？"><a href="#什么是CORS？" class="headerlink" title="什么是CORS？"></a>什么是CORS？</h3><p>CORS（Cross-Origin Resource Sharing，跨域资源共享）是一种机制，它使用额外的HTTP头来告诉浏览器，<br>允许一个域上的Web应用程序访问另一个域上的资源。这是一种绕开同源策略的安全机制。</p>
-<h3 id="如何使用："><a href="#如何使用：" class="headerlink" title="如何使用："></a>如何使用：</h3><ol>
-<li>在下方输入框中输入要测试的完整URL（例如：<a target="_blank" rel="noopener" href="https://api.example.com/data%EF%BC%89">https://api.example.com/data）</a></li>
-<li>点击”检测CORS”按钮</li>
-<li>查看返回的响应头信息，特别是与CORS相关的头部</li>
-</ol>
-<p><label for="target-url">请输入要测试的URL:</label></p>
-<div class="cors-test-input-group">
-  <input type="text" id="target-url" placeholder="https://example.com/api/endpoint">
-  <button id="test-cors-btn">检测CORS</button>
-</div>
-<div id="result-container">
-  <div id="result-content" style="display:none;">
+<div class="cors-container container-fluid">
+  <div class="form-group">
+    <label for="targetUrl">目标 URL：</label>
+    <input
+      type="url"
+      class="form-control"
+      id="targetUrl"
+      placeholder="https://api.example.com/data"
+    />
+    <small class="form-text text-muted">
+      请输入完整的 URL，包括协议（http:// 或 https://）
+    </small>
+  </div>
 
-<pre><code class="hljs">## 检测结果
-</code></pre>
+  <div class="form-group">
+    <label for="requestMethod">请求方法：</label>
+    <select class="custom-select" id="requestMethod">
+      <option value="HEAD" selected>HEAD（推荐，无副作用）</option>
+      <option value="GET">GET（获取响应体）</option>
+      <option value="OPTIONS">OPTIONS（预检请求）</option>
+    </select>
+    <small class="form-text text-muted">
+      HEAD 方法仅获取响应头，不获取响应体，适合大多数检测场景
+    </small>
+  </div>
+
+  <div class="mb-3">
+    <input type="checkbox" id="forcePreflight" />
+    <label for="forcePreflight">
+      强制触发预检请求（添加自定义头 X-CORS-Test，使请求变为"非简单请求"）
+    </label>
+    <small class="form-text text-muted d-block">
+      勾选后将发送自定义请求头，浏览器会先发送 OPTIONS 预检请求
+    </small>
+  </div>
+
+  <div class="mb-3">
+    <button id="testBtn" class="btn btn-primary btn-lg">检测 CORS</button>
+  </div>
+
+  <!-- 简单提示消息 -->
+  <div id="simpleAlert" class="result-section" style="display: hidden;">
+    <div class="alert" role="alert"></div>
+  </div>
+
+  <!-- 检测结果区域 -->
+  <div id="resultSection" class="result-section" style="display: none">
+    <!-- 加载提示 -->
+    <div id="loadingAlert" class="alert alert-info" style="display: none">
+      正在检测，请稍候...
+    </div>
+
+    <!-- 成功提示 -->
+    <div id="successAlert" class="alert alert-success" style="display: none">
+      <strong>✓ 请求成功！</strong> CORS 策略允许当前源访问该 URL。
+    </div>
+
+    <!-- 无 CORS 头警告 -->
+    <div
+      id="noCorsHeadersAlert"
+      class="alert alert-warning"
+      style="display: none"
+    >
+      <strong>注意：</strong> 响应中没有包含 CORS 相关的头信息。
+      这可能是因为服务器没有设置这些头，或者它们没有被暴露给前端。
+    </div>
+
+    <!-- HTTP 状态卡片 -->
+    <div id="httpStatusCard" class="card mb-3" style="display: none">
+      <div class="card-header"><strong>HTTP 状态</strong></div>
+      <div class="card-body">
+        <p class="m-0"><strong>状态码：</strong> <span data-ref="statusText"></span></p>
+      </div>
+    </div>
+
+    <!-- CORS 相关响应头卡片 -->
+    <div id="corsHeadersCard" class="card mb-3" style="display: none">
+      <div class="card-header"><strong>CORS 相关响应头</strong></div>
+      <div class="card-body" data-ref="body"></div>
+    </div>
+
+    <!-- 所有响应头卡片 -->
+    <div id="allHeadersCard" class="card mb-3" style="display: none">
+      <div class="card-header"><strong>所有响应头</strong></div>
+      <div class="card-body" data-ref="body"></div>
+    </div>
+
+    <!-- 错误详情块 -->
+    <div id="errorDetail" style="display: none">
+      <div class="alert alert-danger">
+        <strong>✗ 请求失败</strong>
+        <div data-ref="errorContent">
+          <!-- 错误类型内容通过 display 切换 -->
+          <div data-error-type="timeout" style="display: none">
+            <p><strong>错误类型：</strong>请求超时</p>
+            <p>服务器在 5 秒内没有响应。可能的原因：</p>
+            <ul>
+              <li>服务器响应缓慢</li>
+              <li>网络连接问题</li>
+              <li>服务器不允许当前请求方法</li>
+            </ul>
+          </div>
+          <div data-error-type="cors" style="display: none">
+            <p><strong>错误类型：</strong>CORS 策略阻止</p>
+            <p>
+              浏览器因为缺少
+              <code>Access-Control-Allow-Origin</code>
+              响应头或该头的值不匹配而拦截了请求。
+            </p>
+            <p class="mb-0">
+              <strong>重要提示：</strong>由于浏览器安全限制，当 CORS
+              失败时无法获取服务器返回的具体 CORS 头信息。
+            </p>
+          </div>
+          <div data-error-type="network" style="display: none">
+            <p><strong>错误类型：</strong>网络层错误</p>
+            <p>这不是 CORS 问题，而是网络层面的错误。可能的原因：</p>
+            <ul>
+              <li>DNS 解析失败（域名不存在）</li>
+              <li>连接被拒绝（服务器未运行）</li>
+              <li>SSL/TLS 证书错误</li>
+              <li>网络连接中断</li>
+            </ul>
+          </div>
+          <div data-error-type="cors_or_network" style="display: none">
+            <p><strong>错误类型：</strong>请求被阻止（CORS 或网络错误）</p>
+            <p>浏览器拦截了请求，可能是以下原因之一：</p>
+            <ul>
+              <li>
+                <strong>CORS 策略阻止：</strong>服务器没有返回正确的
+                <code>Access-Control-Allow-Origin</code> 响应头
+              </li>
+              <li>
+                <strong>预检请求失败：</strong>对于非简单请求，OPTIONS
+                预检请求未通过
+              </li>
+              <li>
+                <strong>网络层错误：</strong>DNS 失败、连接拒绝、证书错误等
+              </li>
+            </ul>
+            <p class="mb-0">
+              <strong>重要提示：</strong
+              >由于浏览器安全限制，无法获取详细的错误信息。请打开浏览器开发者工具的
+              <strong>Network</strong> 面板查看完整的请求细节和错误信息。
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3">
+        <div class="card-header"><strong>错误详情</strong></div>
+        <div class="card-body">
+          <p><strong>错误名称：</strong> <span data-ref="errorName"></span></p>
+          <p>
+            <strong>错误消息：</strong> <span data-ref="errorMessage"></span>
+          </p>
+          <p class="mb-0">
+            <strong>原始消息：</strong> <span data-ref="errorOriginal"></span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 调试建议 -->
+    <div id="debugSuggest" class="alert alert-info" style="display: none">
+      <strong>调试建议：</strong>
+      <ol class="mb-0">
+        <li>按 <kbd>F12</kbd> 打开浏览器开发者工具</li>
+        <li>切换到 <strong>Network</strong>（网络）面板</li>
+        <li>重新执行检测，查看失败的请求</li>
+        <li>点击请求查看详细信息，包括请求头、响应头和错误消息</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 模板：响应头条目（隐藏，供 JS 克隆） -->
+  <div id="headerItemTmpl" style="display: none">
+    <div class="header-item">
+      <span class="header-name"></span>
+      <span class="header-value"></span>
+    </div>
   </div>
 </div>
 
-<script type="module" src="./cors-test.js"></script>
+<script src="./cors-test.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+
+<!-- 响应体预览卡片 -->
+<div id="responseBodyCard" class="card" style="display: none;">
+
+    <div class="fold">
+      <div class="fold-title fold-响应体预览 collapsed" data-toggle="collapse" href="#collapse-8f7bdefe" role="button" aria-expanded="false" aria-controls="collapse-8f7bdefe">
+        <div class="fold-arrow">▶</div>响应体预览
+      </div>
+      <div class="fold-collapse collapse" id="collapse-8f7bdefe">
+        <div class="fold-content">
+          <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs HTML">（暂无可用预览）<br></code></pre></td></tr></table></figure>
+        </div>
+      </div>
+    </div>
+</div>
+
 
                 
               </div>
@@ -415,6 +491,36 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%B7%A5%E5%85%B7/" class="category-chain-item">工具</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%B7%A5%E5%85%B7/" class="print-no-link">#工具</a>
+      
+        <a href="/tags/CORS/" class="print-no-link">#CORS</a>
+      
+    </div>
   
 </div>
 
@@ -424,8 +530,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>CORS-test</div>
-      <div>https://blog.ivandspc.top/2026/01-09-CORS-test/</div>
+      <div>前端CORS直接测试</div>
+      <div>https://blog.ivandspc.top/2026/06-15-CORS-test/</div>
     </div>
     <div class="license-meta">
       
@@ -437,7 +543,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2026年1月9日</div>
+          <div>2026年6月15日</div>
         </div>
       
       
@@ -469,18 +575,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/04-09-sb-mbti/" title="SBTI测试">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">SBTI测试</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/10-18-kana2romaji/" title="日文假名罗马音标注工具">
-                        <span class="hidden-mobile">日文假名罗马音标注工具</span>
+                      <a href="/2026/06-07-LinAI-client/" title="LinAI 前端">
+                        <span class="hidden-mobile">LinAI 前端</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -503,7 +603,7 @@
         var options = Object.assign(
           {"clientID":"Ov23lieyDHXPGmHlFL2N","clientSecret":"5b47849bde29359d495aa6a22ed4f46916008441","repo":"zhider-blog","owner":"ZHider","admin":["ZHider"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cloudflare-cors-anywhere.littlehider.workers.dev/?https://github.com/login/oauth/access_token"},
           {
-            id: '835cde591985959c1a863f999665a2ff'
+            id: '99905d9344f4f4a2f3817a9484f0319b'
           }
         )
         var gitalk = new Gitalk(options);
@@ -674,63 +774,7 @@
     var boardCtn = jQuery('#board-ctn');
     var boardTop = boardCtn.offset().top;
 
-    function isExpandAllEnabled() {
-      return CONFIG.toc && CONFIG.toc.expand_all === true;
-    }
-    function expandAllToc() {
-      if (!isExpandAllEnabled()) { return; }
-      jQuery('#toc-body .tocbot-is-collapsed').removeClass('tocbot-is-collapsed');
-    }
-    function updateTocToggle($li, $childList) {
-      var $toggle = $li.children('.toc-toggle');
-      if ($toggle.length === 0) { return; }
-      var collapsed = $childList.hasClass('tocbot-is-collapsed');
-      $toggle
-        .toggleClass('toc-toggle-collapsed', collapsed)
-        .toggleClass('toc-toggle-expanded', !collapsed);
-    }
-    function bindTocToggle() {
-      if (!isExpandAllEnabled()) { return; }
-      jQuery('#toc-body .toc-list-item').each(function() {
-        var $li = jQuery(this);
-        var $childList = $li.children('ol');
-        if ($childList.length === 0) {
-          if ($li.children('.toc-toggle').length === 0) {
-            $li.prepend('<span class="toc-toggle toc-toggle-placeholder" aria-hidden="true">›</span>');
-          }
-          return;
-        }
-
-        if ($li.children('.toc-toggle').length === 0) {
-          $li.prepend('<span class="toc-toggle toc-toggle-expanded" aria-hidden="true">›</span>');
-        }
-        updateTocToggle($li, $childList);
-      });
-      jQuery('#toc-body').off('click.tocToggle').on('click.tocToggle', '.toc-toggle', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var $li = jQuery(this).parent('.toc-list-item');
-        var $childList = $li.children('ol');
-        if ($childList.length === 0) { return; }
-        $childList.toggleClass('tocbot-is-collapsed');
-        updateTocToggle($li, $childList);
-      });
-      if (!window.__tocToggleObserver) {
-        window.__tocToggleObserver = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') { return; }
-            var $list = jQuery(mutation.target);
-            var $li = $list.parent('.toc-list-item');
-            if ($li.length === 0) { return; }
-            updateTocToggle($li, $list);
-          });
-        });
-        jQuery('#toc-body ol').each(function() {
-          window.__tocToggleObserver.observe(this, { attributes: true });
-        });
-      }
-    }
-    var tocConfig = Object.assign({
+    window.tocbot.init(Object.assign({
       tocSelector     : '#toc-body',
       contentSelector : '.markdown-body',
       linkClass       : 'tocbot-link',
@@ -741,16 +785,10 @@
       scrollSmooth    : true,
       includeTitleTags: true,
       headingsOffset  : -boardTop,
-    }, CONFIG.toc);
-    if (isExpandAllEnabled()) {
-      tocConfig.collapseDepth = 6;
-    }
-    window.tocbot.init(tocConfig);
+    }, CONFIG.toc));
     if (toc.find('.toc-list-item').length > 0) {
       toc.css('visibility', 'visible');
     }
-    expandAllToc();
-    bindTocToggle();
 
     Fluid.events.registerRefreshCallback(function() {
       if ('tocbot' in window) {
@@ -762,8 +800,6 @@
         if (toc.find('.toc-list-item').length > 0) {
           toc.css('visibility', 'visible');
         }
-        expandAllToc();
-        bindTocToggle();
       }
     });
   });
