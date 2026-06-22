@@ -122,10 +122,6 @@ function hideAllResultElements() {
   if (resultSection) {
     resultSection.style.display = 'none';
     // 隐藏所有子元素
-    const children = resultSection.children;
-    for (let i = 0; i < children.length; i++) {
-      children[i].style.display = 'none';
-    }
   }
   
   if (simpleAlert) {

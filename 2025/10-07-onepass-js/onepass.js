@@ -19,7 +19,6 @@ function signData(data, key = "") {
         const signature = yield window.crypto.subtle.sign("HMAC", cryptoKey, dataBytes);
         const signatureArray = new Uint8Array(signature);
         let base64String = btoa(String.fromCharCode.apply(null, signatureArray));
-        base64String = base64String.replace(/(.{64})/g, "$1\n");
         return base64String + "\n";
     });
 }
