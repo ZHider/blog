@@ -27,7 +27,7 @@
 <meta property="og:description" content="一个在线 Base64 编解码工具，支持 UTF-8 编码，完全在本地浏览器中运行。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-06-25T17:19:32.000Z">
-<meta property="article:modified_time" content="2026-06-25T17:32:59.024Z">
+<meta property="article:modified_time" content="2026-06-25T17:35:39.113Z">
 <meta property="article:author" content="ZHider">
 <meta property="article:tag" content="Base64">
 <meta property="article:tag" content="编解码">
@@ -277,7 +277,9 @@
             
               <div class="markdown-body">
                 
-                
+                <link rel="stylesheet" href="base64-tool.css" type="text/css" />
+<script src="base64-tool.js"></script>
+
 
 <p>粘贴或输入文本，选择编码或解码。</p>
 <div class="form-group">
@@ -357,7 +359,6 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 
-<p>UTF-8 模式正确处理中文等多字节字符；Latin-1 模式兼容旧版只处理 ASCII。</p>
 <div class="d-flex justify-content-between align-items-center mb-3">
   <div>
     <label class="mr-2" for="charsetSelect">字符编码：</label>
@@ -371,7 +372,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 <blockquote>
-<p>所有编解码操作完全在本地浏览器中运行，不会上传任何数据到服务器。</p>
+<p>UTF-8 模式正确处理中文等多字节字符；Latin-1 模式兼容旧版只处理 ASCII。<br>所有编解码操作完全在本地浏览器中运行，不会上传任何数据到服务器。</p>
 </blockquote>
 
                 
