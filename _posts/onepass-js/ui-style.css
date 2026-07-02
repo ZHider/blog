@@ -1,59 +1,6 @@
-.onepass-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-}
-.onepass-container > div {
-  margin-bottom: 15px;
-}
-.input-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-.length-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
-}
-.length-label {
-  font-weight: bold;
-  margin-right: 10px;
-}
-.range-display {
-  margin-left: 10px;
-  min-width: 30px;
-  text-align: center;
-  font-weight: bold;
-}
-.onepass-container input[type="text"],
-.onepass-container input[type="password"],
-.onepass-container input[type="range"],
-.onepass-container textarea {
-  width: 100%;
-  box-sizing: border-box;
-}
-.onepass-container input[type="text"],
-.onepass-container input[type="password"] {
-  padding: 8px;
-  min-height: 32px;
-}
-.onepass-container textarea {
-  padding: 8px;
-  min-height: 80px;
-  resize: vertical;
-}
-.onepass-container button {
-  padding: 12px 16px;
-  margin-right: 10px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  min-height: 44px; /* 确保移动设备上有足够的触摸区域 */
-}
-.checkbox-option {
-  display: flex;
-  align-items: center;
-}
-.checkbox-option input[type="checkbox"] {
-  margin-right: 8px;
+/* OnePassJs 密码生成器 - 自定义样式（仅 Bootstrap 无法满足的部分） */
+
+.onepass-container .btn-lg {
+  padding: 0.4em 0.8em;
+  font-size: 1rem;
 }

@@ -1,7 +1,3 @@
-// 检查是否保存密码
-function shouldSavePassword() {
-  return document.getElementById("savePassword").checked;
-}
 
 // 测试加密生成密码
 async function generatePassword() {
@@ -21,7 +17,7 @@ async function generatePassword() {
   }
   
   // 保存主密码（如果用户选择了保存）
-  if (shouldSavePassword()) {
+  if (document.getElementById("savePassword").checked) {
     localStorage.setItem("onepassjs_pwd", masterPassword);
   }
   
@@ -66,7 +62,7 @@ function copyGeneratedPasswordToClipboard() {
 
 // 处理保存密码选项变化
 function handleSavePasswordChange() {
-  if (shouldSavePassword()) {
+  if (document.getElementById("savePassword").checked) {
     const masterPassword = document.getElementById("param1").value;
     if (masterPassword) {
       localStorage.setItem("onepassjs_pwd", masterPassword);

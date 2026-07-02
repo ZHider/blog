@@ -1,37 +1,28 @@
 ---
-title: CORS-test
-date: 2026-01-09 01:50:27
+title: 前端CORS直接测试
+date: 2026-06-15 04:47:35
 tags:
-excerpt: 一个用于测试跨域资源共享(CORS)策略的工具页面，允许用户输入URL并检测其CORS头部配置
+  - 工具
+  - CORS
+categories:
+  - 工具
+excerpt: 纯前端 CORS 检测工具，测试跨域请求是否被允许
 ---
 
-<link rel="stylesheet" href="./cors-test.css">
-
-# CORS测试页面
-
 ## 使用说明
-此工具可以帮助您测试目标URL的CORS（跨域资源共享）配置。只需输入要测试的URL，然后点击"检测CORS"按钮即可。
 
-### 什么是CORS？
-CORS（Cross-Origin Resource Sharing，跨域资源共享）是一种机制，它使用额外的HTTP头来告诉浏览器，
-允许一个域上的Web应用程序访问另一个域上的资源。这是一种绕开同源策略的安全机制。
+输入目标 URL，点击检测按钮测试当前页面是否可以跨域访问该 URL。
+由于浏览器安全限制，当 CORS 失败时无法获取服务器返回的具体 CORS 头信息，只能给出"被阻止"的判断。
+请打开浏览器开发者工具的 Network 面板查看完整细节。
 
-### 如何使用：
-1. 在下方输入框中输入要测试的完整URL（例如：https://api.example.com/data）
-2. 点击"检测CORS"按钮
-3. 查看返回的响应头信息，特别是与CORS相关的头部
+{% includeFile "content.html" true %}
 
-<label for="target-url">请输入要测试的URL:</label>
-<div class="cors-test-input-group">
-  <input type="text" id="target-url" placeholder="https://example.com/api/endpoint">
-  <button id="test-cors-btn">检测CORS</button>
-</div>
-<div id="result-container">
-  <div id="result-content" style="display:none;">
-
-    ## 检测结果
-    
-  </div>
+<!-- 响应体预览卡片 -->
+<div id="responseBodyCard" class="card" style="display: none;">
+{% fold 响应体预览 @响应体预览 %}
+```HTML
+（暂无可用预览）
+```
+{% endfold %}
 </div>
 
-<script type="module" src="./cors-test.js"></script>

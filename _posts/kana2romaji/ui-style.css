@@ -1,40 +1,22 @@
-body {
-  font-family: "Hiragino Sans GB", "Hiragino Sans", "Microsoft YaHei", "Meiryo",
-    "Yu Gothic", "Segoe UI", sans-serif;
-}
-textarea {
-  width: 100%;
-  height: 120px;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  resize: vertical;
-  box-sizing: border-box;
-}
-button {
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 10px;
-  transition: background-color 0.3s;
-}
-button:hover {
-  background-color: #2980b9;
-}
-.ruby-text {
+/* 假名转罗马音工具 - 自定义样式（仅 Bootstrap 无法满足的部分） */
+
+/* 限定在工具容器内，避免污染全局 */
+#kana2romaji-tool .ruby-text {
   line-height: 2;
   font-size: 18px;
-  padding: 12px;
-  white-space: pre-wrap; /* 保留空格和换行 */
+  white-space: pre-wrap;
 }
-ruby {
+
+#kana2romaji-tool ruby {
   margin: 0 2px;
 }
-rt {
+
+#kana2romaji-tool rt {
   font-size: 0.7em;
   color: #e74c3c;
+}
+
+/* 深色模式适配 */
+html[data-user-color-scheme="dark"] #kana2romaji-tool rt {
+  color: #ff6b6b;
 }

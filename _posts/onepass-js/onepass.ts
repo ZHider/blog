@@ -3,19 +3,8 @@
  * 这个模块实现了基于HMAC-SHA256的加密算法，并包含多层处理和混淆
  */
 
-// 定义字符映射表类型
-interface CharacterMap {
-  [key: string]: string;
-}
 
 // 定义加密配置参数类型
-interface EncryptConfig {
-  data: string;           // 要加密的数据
-  key: string;            // 加密密钥
-  enableTransform: boolean; // 是否启用字符转换
-  enableReplace: boolean;  // 是否启用特殊字符替换
-  lengthLimit: number;     // 返回结果长度限制
-}
 
 /**
  * 内部HMAC签名函数
@@ -51,9 +40,6 @@ async function signData(data: string, key: string = ""): Promise<string> {
   const signatureArray = new Uint8Array(signature);
   let base64String = btoa(String.fromCharCode.apply(null, signatureArray));
   
-  // 每64个字符添加换行符
-  base64String = base64String.replace(/(.{64})/g, "$1\n");
-  
   return base64String + "\n";
 }
 
@@ -63,7 +49,7 @@ async function signData(data: string, key: string = ""): Promise<string> {
  */
 function transformCharacters(charArray: string[]): void {
   // 定义字符映射表
-  const charMap: CharacterMap = {
+  const charMap: Record<string, string> = {
     "A": "!",
     "E": "@",
     "I": "#",
