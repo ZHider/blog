@@ -4,6 +4,37 @@
   
   
   <entry>
+    <title>ImgObs — 可逆图片混淆工具</title>
+    <link href="/2026/07-02-imgobs/"/>
+    <url>/2026/07-02-imgobs/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" href="imgobs.css" type="text/css" /><p>拖拽或选择图片，一键混淆和恢复。算法基于 8×8 JPEG 对齐块与确定性种子排列，混淆结果可直接保存为 JPG，恢复时从底部元数据条读取原始尺寸。</p><div id="dropZone" class="imgobs-dropzone mb-2">  <div class="h2 mb-2">⬆</div>  拖拽图片到此处，或点击选择文件  <input type="file" id="fileInput" accept="image/*" hidden></div><script type="module">import { initUpload } from './imgobs.js';document.addEventListener('DOMContentLoaded', initUpload);</script><div id="gallery" hidden>  <p class="mb-2">    <button id="obfBtn" class="btn btn-primary" disabled>🔀 混淆</button>    <button id="recBtn" class="btn btn-primary ml-2" disabled>↩ 恢复</button>  </p>  <div class="imgobs-panels">    <div class="imgobs-card">      <strong class="imgobs-title">原图</strong>      <canvas id="origCanvas" class="imgobs-canvas"></canvas>      <div class="imgobs-info" id="origInfo"></div>    </div>    <div class="imgobs-card">      <strong class="imgobs-title">混淆结果</strong>      <canvas id="obfCanvas" class="imgobs-canvas"></canvas>      <div class="imgobs-info" id="obfInfo"></div>      <button id="dlObfBtn" class="btn btn-success btn-sm mt-2" disabled>⬇ 下载 Q=60 JPG</button>    </div>    <div class="imgobs-card">      <strong class="imgobs-title">恢复结果</strong>      <canvas id="recCanvas" class="imgobs-canvas"></canvas>      <div class="imgobs-info" id="recInfo"></div>      <button id="dlRecBtn" class="btn btn-success btn-sm mt-2" disabled>⬇ 下载 Q=85 JPG</button>    </div>  </div></div><div id="status" class="imgobs-info mb-4"></div><script type="module">import { initGallery } from './imgobs.js';document.addEventListener('DOMContentLoaded', initGallery);</script><blockquote><p>所有计算完全在本地浏览器中运行，图片不上传任何服务器。混淆算法使用固定种子（seed&#x3D;42），任何人使用相同工具均可恢复。</p></blockquote><h2 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h2><table><thead><tr><th>步骤</th><th>说明</th></tr></thead><tbody><tr><td><strong>像素配对</strong></td><td>将 RGBA 像素展平为 RGB，每 2 个像素配对为 6 字节块</td></tr><tr><td><strong>块排列</strong></td><td>用 mulberry32 PRNG 生成确定性排列，打乱所有块顺序</td></tr><tr><td><strong>8×8 渲染</strong></td><td>每块编码为两个 8×8 半区（左半区&#x2F;右半区各 4 列），亮度值编码像素数据</td></tr><tr><td><strong>元数据条</strong></td><td>底部追加 16px 行，编码原始宽度和高度（各 12bit），确保可逆</td></tr><tr><td><strong>恢复</strong></td><td>解析元数据 → 提取半区均值 → 逆排列 → 还原原始像素</td></tr></tbody></table><h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><ul><li>输出为 JPG，兼容性好，适合分享</li><li>恢复时无需额外参数（尺寸信息嵌入图中）</li><li>输出尺寸自动对齐 JPEG 8×8 block + 4:2:0 MCU</li><li>最长边默认缩放到 1920px 以内</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>工具</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>图片</tag>
+      
+      <tag>混淆</tag>
+      
+      <tag>隐私</tag>
+      
+      <tag>加密</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Base64 转码工具</title>
     <link href="/2026/06-26-base64-encoder/"/>
     <url>/2026/06-26-base64-encoder/</url>

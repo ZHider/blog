@@ -1,0 +1,64 @@
+/* ImgObs 可逆图片混淆 - 深色模式适配 + 少量自定义样式 */
+
+/* ── 上传区虚线边框（Bootstrap 无 dashed 变体）─── */
+.imgobs-dropzone {
+  border: 2px dashed #c7c7cc;
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  background: #fff;
+  color: #6e6e73;
+  font-size: 1.1rem;
+}
+.imgobs-dropzone:hover,
+.imgobs-dropzone.drag-over {
+  border-color: #007aff;
+  background: #f0f7ff;
+}
+
+/* ── 三列卡片（替代 Bootstrap 的 row > col > card > card-body）─── */
+/* .imgobs-title {
+  display: block;
+  font-size: .9rem;
+  font-weight: 500;
+  color: #6e6e73;
+  margin-bottom: .5rem;
+} */
+
+.imgobs-info {
+  font-size: .85rem;
+  color: #6e6e73;
+}
+
+/* canvas 统一展示 */
+.imgobs-canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  background: #eee;
+  image-rendering: auto;
+}
+canvas[width="0"] { display: none; }
+
+/* 深色模式 */
+html[data-user-color-scheme="dark"] .imgobs-dropzone {
+  background-color: #1e1e1e;
+  border-color: #444;
+  color: #aaa;
+}
+html[data-user-color-scheme="dark"] .imgobs-dropzone:hover,
+html[data-user-color-scheme="dark"] .imgobs-dropzone.drag-over {
+  border-color: #0a84ff;
+  background-color: #1a2838;
+}
+
+html[data-user-color-scheme="dark"] .imgobs-card {
+  background-color: #1e1e1e;
+}
+
+html[data-user-color-scheme="dark"] .imgobs-canvas {
+  background-color: #333;
+}
