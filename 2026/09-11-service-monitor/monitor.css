@@ -1,0 +1,188 @@
+/* 服务状态监控 —— 大色块样式 + 深色模式适配
+   所有选择器都限定在 .svcmon-* 作用域内，不触碰主题的全局元素。 */
+
+/* 主色块：整块纯色 + 超大延迟数字 */
+.svcmon-board {
+  border-radius: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  color: #fff;
+  transition: background-color 0.25s ease;
+}
+
+.svcmon-state-up {
+  background-color: #1f9254;
+}
+.svcmon-state-slow {
+  background-color: #b07d0a;
+}
+.svcmon-state-degraded {
+  background-color: #c2571a;
+}
+.svcmon-state-down {
+  background-color: #c0392b;
+}
+.svcmon-state-unknown {
+  background-color: #6c757d;
+}
+.svcmon-state-busy {
+  background-color: #2c6fa8;
+}
+
+.svcmon-state-text {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  opacity: 0.95;
+}
+
+.svcmon-latency-line {
+  display: flex;
+  align-items: baseline;
+}
+
+.svcmon-latency {
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+
+.svcmon-latency-unit {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-left: 0.35rem;
+  opacity: 0.85;
+}
+
+.svcmon-reason {
+  max-width: 34rem;
+  margin-top: 0.35rem;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.svcmon-right {
+  min-width: 15rem;
+  font-size: 0.9rem;
+}
+
+.svcmon-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.svcmon-desc {
+  opacity: 0.85;
+  margin-bottom: 0.5rem;
+}
+
+.svcmon-kv {
+  display: flex;
+}
+
+.svcmon-kv-key {
+  flex: 0 0 4.5rem;
+  opacity: 0.75;
+}
+
+.svcmon-kv-val {
+  flex: 1 1 auto;
+  word-break: break-all;
+}
+
+.svcmon-mono {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.82rem;
+}
+
+/* 服务切换按钮上的状态小圆点 */
+.svcmon-switch .svcmon-switch-btn {
+  display: inline-flex;
+  align-items: center;
+}
+
+.svcmon-dot {
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  margin-right: 0.45rem;
+  background-color: #adb5bd;
+}
+.svcmon-dot-up {
+  background-color: #2ecc71;
+}
+.svcmon-dot-slow {
+  background-color: #f1c40f;
+}
+.svcmon-dot-degraded {
+  background-color: #e67e22;
+}
+.svcmon-dot-down {
+  background-color: #e74c3c;
+}
+.svcmon-dot-busy {
+  background-color: #3498db;
+  animation: svcmon-pulse 1s ease-in-out infinite;
+}
+
+@keyframes svcmon-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+/* 分阶段耗时的小色块 */
+.svcmon-tile {
+  background-color: #f1f3f5;
+  border-radius: 0.4rem;
+  padding: 0.6rem 0.7rem;
+  height: 100%;
+}
+
+.svcmon-tile-label {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.svcmon-tile-value {
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  word-break: break-all;
+}
+
+.svcmon-note {
+  font-size: 0.82rem;
+  color: #6c757d;
+}
+
+.svcmon-interval {
+  width: auto;
+}
+
+/* 深色模式 */
+html[data-user-color-scheme="dark"] .svcmon-tile {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+html[data-user-color-scheme="dark"] .svcmon-tile-label,
+html[data-user-color-scheme="dark"] .svcmon-note {
+  color: #9aa0a6;
+}
+
+html[data-user-color-scheme="dark"] .svcmon-switch .btn-outline-primary {
+  color: #8ab4f8;
+  border-color: #5f6368;
+}
+
+html[data-user-color-scheme="dark"] .svcmon-interval {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border-color: #444;
+}

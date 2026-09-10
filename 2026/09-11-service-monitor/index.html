@@ -1,0 +1,1124 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon.webp">
+  <link rel="icon" href="/img/icon.webp">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="ZHider">
+  <meta name="keywords" content="ivand,zhider,zhiders blog,伊万德">
+  
+    <meta name="description" content="纯前端服务可用性与延迟监控面板：用浏览器 Resource Timing API 读取真实网络耗时，大色块一眼看出服务是否正常，支持多服务切换。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="服务状态监控面板">
+<meta property="og:url" content="https://blog.ivandspc.top/2026/09-11-service-monitor/index.html">
+<meta property="og:site_name" content="ZHider&#39;s Blog">
+<meta property="og:description" content="纯前端服务可用性与延迟监控面板：用浏览器 Resource Timing API 读取真实网络耗时，大色块一眼看出服务是否正常，支持多服务切换。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-09-10T16:40:00.000Z">
+<meta property="article:modified_time" content="2026-09-10T16:47:32.357Z">
+<meta property="article:author" content="ZHider">
+<meta property="article:tag" content="Resource Timing">
+<meta property="article:tag" content="可用性">
+<meta property="article:tag" content="监控">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>服务状态监控面板 - ZHider&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.ivandspc.top","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>伊万德的小窝</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="服务状态监控面板"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-09-11 00:40" pubdate>
+          2026年9月11日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          68 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">服务状态监控面板</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <link rel="stylesheet" href="monitor.css" type="text/css" />
+
+<div id="svcSwitcher" class="svcmon-switch btn-group flex-wrap mb-3" role="group" aria-label="服务切换"></div>
+
+<script type="module">
+import { SERVICES, DEFAULT_SERVICE_ID } from "./services.js";
+
+document.addEventListener("DOMContentLoaded", function () {
+  var wrap = document.getElementById("svcSwitcher");
+  var dots = {};
+  var currentId = DEFAULT_SERVICE_ID;
+
+  function emit(name, detail) {
+    document.dispatchEvent(new CustomEvent(name, { detail: detail }));
+  }
+
+  function setDot(id, state) {
+    if (dots[id]) dots[id].className = "svcmon-dot svcmon-dot-" + state;
+  }
+
+  function markActive(id) {
+    var buttons = wrap.querySelectorAll(".svcmon-switch-btn");
+    for (var i = 0; i < buttons.length; i++) {
+      if (buttons[i].getAttribute("data-service") === id) buttons[i].classList.add("active");
+      else buttons[i].classList.remove("active");
+    }
+  }
+
+  for (var i = 0; i < SERVICES.length; i++) {
+    (function (service) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn btn-outline-primary svcmon-switch-btn";
+      btn.setAttribute("data-service", service.id);
+      if (service.desc) btn.title = service.desc;
+
+      var dot = document.createElement("span");
+      dot.className = "svcmon-dot svcmon-dot-unknown";
+
+      btn.appendChild(dot);
+      btn.appendChild(document.createTextNode(service.name));
+      btn.addEventListener("click", function () {
+        currentId = service.id;
+        markActive(currentId);
+        emit("monitor:select", { serviceId: currentId });
+      });
+
+      dots[service.id] = dot;
+      wrap.appendChild(btn);
+    })(SERVICES[i]);
+  }
+
+  markActive(currentId);
+
+  document.addEventListener("monitor:busy", function (event) {
+    var ids = event.detail.ids;
+    for (var i = 0; i < ids.length; i++) setDot(ids[i], "busy");
+  });
+
+  document.addEventListener("monitor:result", function (event) {
+    setDot(event.detail.serviceId, event.detail.state);
+  });
+});
+</script>
+
+
+<div id="svcBoard" class="svcmon-board svcmon-state-unknown d-flex flex-wrap justify-content-between align-items-center mb-3">
+  <div class="svcmon-left">
+    <div id="svcStateText" class="svcmon-state-text">检测中…</div>
+    <div class="svcmon-latency-line">
+      <span id="svcLatency" class="svcmon-latency">--</span>
+      <span class="svcmon-latency-unit">ms</span>
+    </div>
+    <div id="svcReason" class="svcmon-reason">正在准备…</div>
+  </div>
+  <div class="svcmon-right">
+    <div id="svcName" class="svcmon-name">—</div>
+    <div id="svcDesc" class="svcmon-desc">—</div>
+    <div class="svcmon-kv"><span class="svcmon-kv-key">地址</span><span id="svcUrl" class="svcmon-kv-val svcmon-mono">—</span></div>
+    <div class="svcmon-kv"><span class="svcmon-kv-key">HTTP</span><span id="svcHttp" class="svcmon-kv-val">—</span></div>
+    <div class="svcmon-kv"><span class="svcmon-kv-key">响应内容</span><span id="svcBody" class="svcmon-kv-val svcmon-mono">—</span></div>
+    <div class="svcmon-kv"><span class="svcmon-kv-key">最近检测</span><span id="svcTime" class="svcmon-kv-val">—</span></div>
+  </div>
+</div>
+
+<script type="module">
+import { SERVICES, DEFAULT_SERVICE_ID } from "./services.js";
+import { probeService } from "./service-probe.js";
+
+document.addEventListener("DOMContentLoaded", function () {
+  var board = document.getElementById("svcBoard");
+  var elState = document.getElementById("svcStateText");
+  var elLatency = document.getElementById("svcLatency");
+  var elReason = document.getElementById("svcReason");
+  var elName = document.getElementById("svcName");
+  var elDesc = document.getElementById("svcDesc");
+  var elUrl = document.getElementById("svcUrl");
+  var elHttp = document.getElementById("svcHttp");
+  var elBody = document.getElementById("svcBody");
+  var elTime = document.getElementById("svcTime");
+
+  var STATE_TEXT = { up: "运行正常", slow: "延迟偏高", degraded: "响应异常", down: "服务不可用" };
+
+  var results = {};
+  var currentId = DEFAULT_SERVICE_ID;
+  var busy = false;
+
+  function emit(name, detail) {
+    document.dispatchEvent(new CustomEvent(name, { detail: detail }));
+  }
+
+  function serviceById(id) {
+    for (var i = 0; i < SERVICES.length; i++) {
+      if (SERVICES[i].id === id) return SERVICES[i];
+    }
+    return null;
+  }
+
+  function httpText(result) {
+    if (result.opaque) return "不可读（no-cors）";
+    return result.httpStatus > 0 ? String(result.httpStatus) : "—";
+  }
+
+  function bodyText(result) {
+    if (result.bodyText) return result.bodyText;
+    return result.opaque ? "不可读（no-cors）" : "（空响应体）";
+  }
+
+  function paint() {
+    var service = serviceById(currentId);
+    if (!service) return;
+    var result = results[currentId];
+    var state = result ? result.state : "unknown";
+    var visual = busy && !result ? "busy" : state;
+
+    board.className =
+      "svcmon-board svcmon-state-" + visual + " d-flex flex-wrap justify-content-between align-items-center mb-3";
+
+    elName.textContent = service.name;
+    elDesc.textContent = service.desc ? service.desc : service.url;
+    elUrl.textContent = service.url;
+    elState.textContent = result ? STATE_TEXT[state] : busy ? "检测中…" : "未检测";
+    elLatency.textContent = result && result.latency > 0 ? String(result.latency) : "--";
+    elHttp.textContent = result ? httpText(result) : "—";
+    elBody.textContent = result ? bodyText(result) : "—";
+    elTime.textContent = result ? new Date(result.at).toLocaleTimeString("zh-CN", { hour12: false }) : "—";
+
+    var reason = result ? result.reason : "点击「刷新」开始探测";
+    if (busy && result) reason = reason + "（刷新中…）";
+    elReason.textContent = reason;
+  }
+
+  function runProbe(service) {
+    return probeService(service).then(function (result) {
+      results[service.id] = result;
+      if (service.id === currentId) paint();
+      emit("monitor:result", result);
+    });
+  }
+
+  function probeAll() {
+    if (busy) return;
+    busy = true;
+    var ids = [];
+    for (var i = 0; i < SERVICES.length; i++) ids.push(SERVICES[i].id);
+    emit("monitor:busy", { ids: ids });
+    paint();
+
+    var pending = [];
+    for (var j = 0; j < SERVICES.length; j++) pending.push(runProbe(SERVICES[j]));
+
+    Promise.all(pending).then(function () {
+      busy = false;
+      emit("monitor:idle", {});
+      paint();
+    });
+  }
+
+  document.addEventListener("monitor:select", function (event) {
+    currentId = event.detail.serviceId;
+    paint();
+  });
+
+  document.addEventListener("monitor:refresh", function () {
+    probeAll();
+  });
+
+  paint();
+  probeAll();
+});
+</script>
+
+
+<p>总耗时来自 Resource Timing API，分阶段数据能否显示取决于服务端有没有放行跨域时序。</p>
+<div class="row svcmon-details">
+  <div class="col-6 col-md-3 mb-2">
+    <div class="svcmon-tile">
+      <div class="svcmon-tile-label">总耗时（Resource Timing）</div>
+      <div id="dtTotal" class="svcmon-tile-value">—</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3 mb-2">
+    <div class="svcmon-tile">
+      <div class="svcmon-tile-label">首字节 TTFB</div>
+      <div id="dtTtfb" class="svcmon-tile-value">—</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3 mb-2">
+    <div class="svcmon-tile">
+      <div class="svcmon-tile-label">DNS 解析</div>
+      <div id="dtDns" class="svcmon-tile-value">—</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3 mb-2">
+    <div class="svcmon-tile">
+      <div class="svcmon-tile-label">TCP 连接</div>
+      <div id="dtTcp" class="svcmon-tile-value">—</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3 mb-2">
+    <div class="svcmon-tile">
+      <div class="svcmon-tile-label">TLS 握手</div>
+      <div id="dtTls" class="svcmon-tile-value">—</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3 mb-2">
+    <div class="svcmon-tile">
+      <div class="svcmon-tile-label">内容下载</div>
+      <div id="dtDownload" class="svcmon-tile-value">—</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3 mb-2">
+    <div class="svcmon-tile">
+      <div class="svcmon-tile-label">传输大小</div>
+      <div id="dtSize" class="svcmon-tile-value">—</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3 mb-2">
+    <div class="svcmon-tile">
+      <div class="svcmon-tile-label">协议 / 读取模式</div>
+      <div id="dtProto" class="svcmon-tile-value">—</div>
+    </div>
+  </div>
+</div>
+
+<div id="dtNote" class="svcmon-note mb-3">等待首次探测结果。</div>
+
+<script type="module">
+import { DEFAULT_SERVICE_ID } from "./services.js";
+
+document.addEventListener("DOMContentLoaded", function () {
+  var currentId = DEFAULT_SERVICE_ID;
+  var latest = null;
+  var probing = false;
+
+  function set(id, text) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = text;
+  }
+
+  function ms(value) {
+    return value > 0 ? Math.round(value * 10) / 10 + " ms" : "—";
+  }
+
+  function sizeText(timing) {
+    return timing.transferSize > 0 ? timing.transferSize + " B" : "未暴露";
+  }
+
+  function protoText(result) {
+    var protocol = result.timing.protocol ? result.timing.protocol : "未暴露";
+    var mode = result.mode === "cors" ? "CORS 可读" : "no-cors 不透明";
+    return protocol + " · " + mode;
+  }
+
+  function noteText() {
+    if (probing) return "正在重新探测…";
+    if (!latest) return "等待首次探测结果。";
+    var timing = latest.timing;
+    if (timing.source === "clock") {
+      return "浏览器没有留下 Resource Timing 条目（请求可能被拦截或未产生网络事件），本次延迟回退为 performance.now() 计时。";
+    }
+    if (!timing.detailed) {
+      return "总耗时来自 Resource Timing API（浏览器实测网络耗时）；该跨域资源未返回 Timing-Allow-Origin，浏览器已把 DNS / 连接 / TLS / TTFB 等分阶段字段清零，服务端加上 Timing-Allow-Origin: * 后即可显示。";
+    }
+    return "全部数据来自 Resource Timing API（服务端已允许 Timing-Allow-Origin，分阶段耗时可直接读取）。";
+  }
+
+  function paint() {
+    var timing = latest ? latest.timing : null;
+    set("dtTotal", timing ? (timing.duration > 0 ? timing.duration + " ms" : "0 ms（缓存命中）") : "—");
+    set("dtTtfb", timing ? ms(timing.ttfb) : "—");
+    set("dtDns", timing ? ms(timing.dns) : "—");
+    set("dtTcp", timing ? ms(timing.connect) : "—");
+    set("dtTls", timing ? ms(timing.tls) : "—");
+    set("dtDownload", timing ? ms(timing.download) : "—");
+    set("dtSize", timing ? sizeText(timing) : "—");
+    set("dtProto", timing ? protoText(latest) : "—");
+    set("dtNote", noteText());
+  }
+
+  document.addEventListener("monitor:select", function (event) {
+    currentId = event.detail.serviceId;
+    latest = null;
+    probing = false;
+    paint();
+  });
+
+  document.addEventListener("monitor:busy", function (event) {
+    var ids = event.detail.ids;
+    for (var i = 0; i < ids.length; i++) {
+      if (ids[i] === currentId) {
+        probing = true;
+        paint();
+        return;
+      }
+    }
+  });
+
+  document.addEventListener("monitor:result", function (event) {
+    if (event.detail.serviceId !== currentId) return;
+    latest = event.detail;
+    probing = false;
+    paint();
+  });
+
+  paint();
+});
+</script>
+
+
+<div class="svcmon-controls d-flex flex-wrap align-items-center mb-3">
+  <button id="svcRefreshBtn" type="button" class="btn btn-primary btn-lg mr-3 mb-1">刷新</button>
+  <div class="d-flex align-items-center mb-1">
+    <input type="checkbox" id="svcAutoChk" class="mr-1">
+    <label for="svcAutoChk" class="mb-0 mr-2">自动刷新</label>
+    <select id="svcAutoInterval" class="custom-select custom-select-sm svcmon-interval">
+      <option value="10">10 秒</option>
+      <option value="30" selected>30 秒</option>
+      <option value="60">60 秒</option>
+      <option value="300">5 分钟</option>
+    </select>
+  </div>
+  <span id="svcAutoHint" class="text-muted small ml-3 mb-1"></span>
+</div>
+
+<script type="module">
+document.addEventListener("DOMContentLoaded", function () {
+  var btn = document.getElementById("svcRefreshBtn");
+  var chk = document.getElementById("svcAutoChk");
+  var sel = document.getElementById("svcAutoInterval");
+  var hint = document.getElementById("svcAutoHint");
+  var timer = null;
+
+  function emit(name, detail) {
+    document.dispatchEvent(new CustomEvent(name, { detail: detail }));
+  }
+
+  function tick() {
+    if (document.hidden) {
+      hint.textContent = "标签页未激活，已跳过本次自动刷新";
+      return;
+    }
+    hint.textContent = "";
+    emit("monitor:refresh", {});
+  }
+
+  function syncTimer() {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+    if (!chk.checked) {
+      hint.textContent = "";
+      return;
+    }
+    var seconds = parseInt(sel.value, 10);
+    timer = setInterval(tick, seconds * 1000);
+    hint.textContent = "每 " + seconds + " 秒自动探测一次（标签页在后台时跳过）";
+  }
+
+  btn.addEventListener("click", function () {
+    emit("monitor:refresh", {});
+  });
+  chk.addEventListener("change", syncTimer);
+  sel.addEventListener("change", syncTimer);
+
+  document.addEventListener("monitor:busy", function () {
+    btn.disabled = true;
+    btn.textContent = "探测中…";
+  });
+  document.addEventListener("monitor:idle", function () {
+    btn.disabled = false;
+    btn.textContent = "刷新";
+  });
+});
+</script>
+
+
+<blockquote>
+<p>本页是纯静态页面，没有后端。打开时它会向上面配置的服务地址发起只读 GET 请求（附带 <code>_ts</code> 时间戳参数以绕过缓存），不发送任何数据，也不携带 Cookie 或凭据（<code>credentials: omit</code>）。探测结果只存在当前页面的内存里，刷新即消失。</p>
+</blockquote>
+<h2 id="判定规则"><a href="#判定规则" class="headerlink" title="判定规则"></a>判定规则</h2><table>
+<thead>
+<tr>
+<th>状态</th>
+<th>颜色</th>
+<th>条件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>运行正常</td>
+<td>绿</td>
+<td>请求成功、响应体匹配 <code>expectText</code>、总耗时 &lt; <code>slowMs</code></td>
+</tr>
+<tr>
+<td>延迟偏高</td>
+<td>琥珀</td>
+<td>请求成功，但总耗时 ≥ <code>slowMs</code>（默认 800 ms）</td>
+</tr>
+<tr>
+<td>响应异常</td>
+<td>橙</td>
+<td>请求成功，但响应体不包含 <code>expectText</code>（服务活着但接口内容不对）</td>
+</tr>
+<tr>
+<td>服务不可用</td>
+<td>红</td>
+<td>网络失败、超时，或 HTTP 状态码 ≥ 400</td>
+</tr>
+<tr>
+<td>检测中</td>
+<td>蓝</td>
+<td>正在探测（第一次探测前也显示蓝色）</td>
+</tr>
+<tr>
+<td>未检测</td>
+<td>灰</td>
+<td>还没有拿到结果</td>
+</tr>
+</tbody></table>
+<p>探测优先走 CORS 请求，能读到状态码和响应体；如果目标没有开放 CORS，会自动退化成 <code>no-cors</code> 不透明请求 —— 这时只能确认「服务可达」，状态码与内容无法校验，界面会如实标注。</p>
+<h2 id="延迟是怎么测的"><a href="#延迟是怎么测的" class="headerlink" title="延迟是怎么测的"></a>延迟是怎么测的</h2><p>页面不自己数秒表，延迟取自浏览器的 <strong>Resource Timing API</strong>：请求发出后用 <code>performance.getEntriesByType(&quot;resource&quot;)</code> 找到这次请求的条目，读它的 <code>duration</code>，也就是浏览器记录的 <code>responseEnd - startTime</code>，包含排队、DNS、连接、TLS、TTFB 和内容下载的全部真实网络耗时。</p>
+<p>几个细节：</p>
+<ul>
+<li>请求默认带上 <code>_ts</code> 时间戳绕开缓存，否则缓存命中时 Resource Timing 耗时会是 0，测不出真实延迟。</li>
+<li>跨域资源只有在服务端返回 <code>Timing-Allow-Origin</code> 时，浏览器才允许读取 DNS &#x2F; TCP &#x2F; TLS &#x2F; TTFB 这些分阶段字段；否则它们会被清零，页面只显示总耗时并给出提示。</li>
+<li>极端情况下（请求被拦截、环境不支持）拿不到 Resource Timing 条目，则退回 <code>performance.now()</code> 差值计时，界面会说明来源。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%B7%A5%E5%85%B7/" class="category-chain-item">工具</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%9B%91%E6%8E%A7/" class="print-no-link">#监控</a>
+      
+        <a href="/tags/%E5%8F%AF%E7%94%A8%E6%80%A7/" class="print-no-link">#可用性</a>
+      
+        <a href="/tags/Resource-Timing/" class="print-no-link">#Resource Timing</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>服务状态监控面板</div>
+      <div>https://blog.ivandspc.top/2026/09-11-service-monitor/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>ZHider</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年9月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/07-02-imgobs/" title="ImgObs — 可逆图片混淆工具">
+                        <span class="hidden-mobile">ImgObs — 可逆图片混淆工具</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments">
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23lieyDHXPGmHlFL2N","clientSecret":"5b47849bde29359d495aa6a22ed4f46916008441","repo":"zhider-blog","owner":"ZHider","admin":["ZHider"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cloudflare-cors-anywhere.littlehider.workers.dev/?https://github.com/login/oauth/access_token"},
+          {
+            id: '61d6a5f2853cd1c8ba0a25db8b4e5134'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
